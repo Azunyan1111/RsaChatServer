@@ -1,17 +1,31 @@
 import pymongo
+from flask import Flask
 
-# connection to mongoDB
-connect = pymongo.MongoClient('localhost', 27017)
+# this instance
+app = Flask(__name__)
 
-# create data base
-db = connect['TestDataBase']
+@app.route("/")
+def index():
+    return "Hello World!"
 
-# create collection
-co = db['TestCollection']
 
-# save one test data
-co.insert_one({"test": 1, "test2": 0})
+def mongodb_connection_test():
+    # connection to mongoDB
+    connect = pymongo.MongoClient('localhost', 27017)
 
-# print all collection data
-for collection in co.find():
-    print collection
+    # create data base
+    db = connect['TestDataBase']
+
+    # create collection
+    co = db['TestCollection']
+
+    # save one test data
+    co.insert_one({"test": 1, "test2": 0})
+
+    # print all collection data
+    for collection in co.find():
+        print collection
+
+
+if __name__ == "__main__":
+    app.run()
