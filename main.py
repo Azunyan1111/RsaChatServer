@@ -1,12 +1,10 @@
 import pymongo
-from flask import Flask
 
-# this instance
-app = Flask(__name__)
-
-@app.route("/")
-def index():
-    return "Hello World!"
+# this is global variable mongodb
+db = ""
+users_collection = ""
+friend_collection = ""
+chat_collection = ""
 
 
 def mongodb_connection_test():
@@ -14,10 +12,10 @@ def mongodb_connection_test():
     connect = pymongo.MongoClient('localhost', 27017)
 
     # create data base
-    db = connect['TestDataBase']
+    dbs = connect['TestDataBase']
 
     # create collection
-    co = db['TestCollection']
+    co = dbs['TestCollection']
 
     # save one test data
     co.insert_one({"test": 1, "test2": 0})
@@ -27,5 +25,15 @@ def mongodb_connection_test():
         print collection
 
 
+def mongodb_setup():
+    # global variable
+    global db
+    # connection to mongoDB
+    connect = pymongo.MongoClient('localhost', 27017)
+    # create data base
+    db = connect['TestDataBase']
+
+
 if __name__ == "__main__":
-    app.run()
+    mongodb_setup()
+    print db.name
