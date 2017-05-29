@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 import pymongo
 from Crypto.Cipher import AES
+from Crypto.PublicKey import RSA
+from Crypto import Random
 import hashlib
 import base64
-
+import os
 # this is global variable mongodb
 db = ""
 users_collection = ""
 friend_collection = ""
 chat_collection = ""
+
 
 debug = True
 
@@ -32,7 +35,7 @@ def mongodb_connection_test():
 
 
 # mongodb first setup
-def mongodb_setup():
+def setup_mongodb():
     # global variable
     global db
     global users_collection
@@ -54,10 +57,6 @@ def set_new_user(username, password):
     global users_collection
     # TODO: password security
     users_collection.insert_one({"username": username, "password": password})
-
-
-def get_new_aes_key():
-    key = "hoge"
 
 
 def get_encrypt_data(raw_data, key, iv):
@@ -88,17 +87,81 @@ def get_decrypt_data(cipher_data_base64, key, iv):
     return raw_data
 
 
+def check_rsa_public_key(key):
+    public_key = get_rsa_public_key().exportKey()
+    public_key = public_key.replace('\n', '')
+    public_key = public_key.replace('\r', '')
+    key = key.replace('\n', '')
+    key = key.replace('\r', '')
+    if public_key.find(key) == 0:
+        return True
+    else:
+        return False
+
+
+def get_rsa_public_key():
+    rsa = RSA.importKey(open('./public.pem', 'r'))
+    return rsa
+
+
+def get_rsa_private_ket():
+    rsa = RSA.importKey(open('./private.pem', 'r'))
+    return rsa
+
+
+def setup_rsa_keys():
+    # no private.pem file. crate private key.
+    if os.path.isfile('./private.pem') is False or os.path.isfile('./public.pem') is False:
+        rsa = RSA.generate(2048, get_random())
+        private_pem = rsa.exportKey(format='PEM')
+        with open('private.pem', 'w') as f:
+            f.write(private_pem)
+        # crate public key.
+        public_pem = rsa.publickey().exportKey()
+        with open('public.pem', 'w') as f:
+            f.write(public_pem)
+
+
+def get_random():
+    return Random.new().read
+
+
+def get_rsa_encrypt(data):
+    return get_rsa_public_key().publickey().encrypt(data, get_random())[0]
+
+
+def get_rsa_decrypt(data):
+    return get_rsa_private_ket().decrypt(data)
+
+
 if __name__ == "__main__":
-    # mongodb_setup()
+    """mongoDB"""
+    # setup_mongodb()
     # print db.name
     # print users_collection
     # print friend_collection
     # print chat_collection
+    """AES"""
+    # message = "114514"
+    # password = "This is password"
+    # ivs = "hoge"
+    # encrypt_data = get_encrypt_data(message, password, ivs)
+    # print encrypt_data
+    # decrypt_data = get_decrypt_data(encrypt_data, password, ivs)
+    # print decrypt_data
 
-    message = "114514"
-    password = "This is password"
-    ivs = "hoge"
-    encrypt_data = get_encrypt_data(message, password, ivs)
-    print encrypt_data
-    decrypt_data = get_decrypt_data(encrypt_data, password, ivs)
-    print decrypt_data
+    """RSA"""
+    setup_rsa_keys()
+    rsa_encrypt = get_rsa_encrypt("hoge")
+    print rsa_encrypt
+    print check_rsa_public_key("-----BEGIN PUBLIC KEY-----" +
+                                "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAldk/K2mEeqaGcUna23YS" +
+                                "nYGkb94TnvMt8pp5/3kAKEZGuyS/EBTiUBxk8B0XqV+TzcOxoIVw2I/8rOt7sPnE" +
+                                "EvOQsyo7If2RpUMdyk6rINwe2jZjpFJnovhmMn5kpDu3JTED1iuHZWFu706VDCMc" +
+                                "4e1+VqHdTb5BWa/l3PRUURooOBwmW0yqelagk2Diu4C9vSmgHCbo3K52Ng9LpDOQ" +
+                                "u5PqBXJWa08dyc4uizFUYHJQxObgWhHVCp4VWmgUkh/72JfNZoYLP5/youvjlRPU" +
+                                "14Eo4KkDEtuk2O7coIkdsfRwYqqWQOdrUgZ8jLsRthZIQM84Wkyq34+ItJbouHGx" +
+                                "AwIDAQAB" +
+                                "-----END PUBLIC KEY-----")
+    rsa_decrypt = get_rsa_decrypt(rsa_encrypt)
+    print rsa_decrypt
