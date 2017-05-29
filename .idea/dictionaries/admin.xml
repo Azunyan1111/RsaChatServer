@@ -2,6 +2,7 @@
   <dictionary name="admin">
     <words>
       <w>mongo</w>
+      <w>pycrypto</w>
       <w>pymongo</w>
     </words>
   </dictionary>
