@@ -60,24 +60,28 @@ def get_new_aes_key():
     key = "hoge"
 
 
-def get_encrypt_data(raw_data, key):
+def get_encrypt_data(raw_data, key, iv):
     raw_data_base64 = base64.b64encode(raw_data)
     # 16byte
     if len(raw_data_base64) % 16 != 0:
         raw_data_base64_16byte = raw_data_base64
         for i in range(16 - (len(raw_data_base64) % 16)):
             raw_data_base64_16byte += "_"
+    else:
+        raw_data_base64_16byte = raw_data_base64
     secret_key = hashlib.sha256(key).digest()
-    crypto = AES.new(secret_key)
+    iv = hashlib.md5(iv).digest()
+    crypto = AES.new(secret_key, AES.MODE_CBC, iv)
     cipher_data = crypto.encrypt(raw_data_base64_16byte)
     cipher_data_base64 = base64.b64encode(cipher_data)
     return cipher_data_base64
 
 
-def get_decrypt_data(cipher_base64_data, key):
-    cipher_data = base64.b64decode(cipher_base64_data)
+def get_decrypt_data(cipher_data_base64, key, iv):
+    cipher_data = base64.b64decode(cipher_data_base64)
     secret_key = hashlib.sha256(key).digest()
-    crypto = AES.new(secret_key)
+    iv = hashlib.md5(iv).digest()
+    crypto = AES.new(secret_key, AES.MODE_CBC, iv)
     raw_data_base64_16byte = crypto.decrypt(cipher_data)
     raw_data_base64 = raw_data_base64_16byte.split("_")[0]
     raw_data = base64.b64decode(raw_data_base64)
@@ -93,7 +97,8 @@ if __name__ == "__main__":
 
     message = "114514"
     password = "This is password"
-    crypt_data = get_encrypt_data(message, password)
-    print crypt_data
-    decrypt_data = get_decrypt_data(crypt_data, password)
+    ivs = "hoge"
+    encrypt_data = get_encrypt_data(message, password, ivs)
+    print encrypt_data
+    decrypt_data = get_decrypt_data(encrypt_data, password, ivs)
     print decrypt_data
