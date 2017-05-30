@@ -172,6 +172,10 @@ def signin_from_post(username, password):
     return "signin ok"
 
 
+def get_friend_list(username):
+    global friend_collection
+    return friend_collection.find_one({'username': username}, {'friend_list': True, '_id': False})
+
 if __name__ == "__main__":
     setup_mongodb()
     setup_rsa_keys()
@@ -182,8 +186,7 @@ if __name__ == "__main__":
     print set_now_user_from_post("foo", "foofoo", base64.b16encode(get_rsa_public_key().exportKey()))
     # add user
     print set_new_friend("hoge", "foo")
-    print set_new_friend("hoge", "fooooooooooooooo")
-
+    print get_friend_list("hoge")
 
     # print base64.b64encode(hashlib.sha256(get_rsa_private_ket().exportKey()).digest())
     """mongoDB"""
