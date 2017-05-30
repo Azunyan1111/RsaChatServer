@@ -61,7 +61,7 @@ class TestStringMethods(unittest.TestCase):
                                                                "I2eZcivIYsqO69UEeg==")
 
     def test_get_rsa_decrypt(self):
-        self.assertEqual(main.get_rsa_encrypt("l2coZCOhoYkPiWFu7lIMj+p/DZoBnk1tpS76ebEUPC++2XpL4kPYBO"
+        self.assertEqual(main.get_rsa_decrypt("l2coZCOhoYkPiWFu7lIMj+p/DZoBnk1tpS76ebEUPC++2XpL4kPYBO"
                                                 "zrmK8NmSZOLfJ78Hcc2CLGJ2WALyLgGK+ETremZp3ZZmezNyY9TH/g"
                                                 "wHh60sASbOYYINJstny9ur5fRh2z9jWAJXqakwmer8LOdpu9EyKGZz"
                                                 "JKj7oJlyJnOtfk+q+lFtImAoePTpoYNh5i5PsXhRWm7nc+SxuQwmtH"
