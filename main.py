@@ -152,15 +152,15 @@ def set_new_friend(username, friend_username):
     return "update ok"
 
 
-
 def set_now_user_from_post(username, password, rsa_public_key):
     global users_collection
     # check username
     if users_collection.find_one({'username': username}) is not None:
-        return "ng"
+        return "crate  ng"
 
     set_new_user(username, password, rsa_public_key)
-    set_new_friend(username, "admin")
+    print set_new_friend(username, "admin")
+    print "crate  ok"
     return signin_from_post(username, password)
 
 
@@ -168,8 +168,8 @@ def signin_from_post(username, password):
     global users_collection
     # check username and passsword
     if users_collection.find_one({'username': username, 'password': password}) is None:
-        return "ng"
-    return "ok"
+        return "signin ng"
+    return "signin ok"
 
 
 if __name__ == "__main__":
