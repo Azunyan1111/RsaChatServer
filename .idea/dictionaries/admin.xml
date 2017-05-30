@@ -4,6 +4,7 @@
       <w>mongo</w>
       <w>pycrypto</w>
       <w>pymongo</w>
+      <w>signin</w>
     </words>
   </dictionary>
 </component>

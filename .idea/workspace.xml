@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a652bd1-2a17-4026-be1e-798eb7ffb7f5" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/admin.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/admin.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/__init__.py" afterPath="$PROJECT_DIR$/tests/__init__.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,11 +23,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="131" column="16" lean-forward="false" selection-start-line="131" selection-start-column="16" selection-end-line="131" selection-end-column="16" />
+            <state relative-caret-position="316">
+              <caret line="153" column="0" lean-forward="true" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
               <folding>
                 <element signature="e#24#38#0" expanded="true" />
               </folding>
@@ -33,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="62" column="35" lean-forward="true" selection-start-line="62" selection-start-column="35" selection-end-line="62" selection-end-column="35" />
+            <state relative-caret-position="314">
+              <caret line="69" column="88" lean-forward="true" selection-start-line="69" selection-start-column="88" selection-end-line="69" selection-end-column="88" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -69,6 +71,9 @@
       <find>random_func</find>
       <find>get_rsa_encrypt</find>
       <find>setup_mongodb</find>
+      <find>get_rsa_public_key</find>
+      <find>set_new</find>
+      <find>username</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -82,8 +87,8 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/tests/all_test.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/tests/__init__.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
@@ -148,7 +153,7 @@
       <recent name="$PROJECT_DIR$/tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Unittest TestStringMethods.test_get_rsa_decrypt">
+  <component name="RunManager" selected="Python.main">
     <configuration default="false" name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -164,50 +169,6 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Unittest TestStringMethods.test_setup_mongodb" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="rsaChatServer" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/__init__.py" />
-      <option name="CLASS_NAME" value="TestStringMethods" />
-      <option name="METHOD_NAME" value="test_setup_mongodb" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Unittest TestStringMethods.test_get_rsa_private_ket" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="rsaChatServer" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/__init__.py" />
-      <option name="CLASS_NAME" value="TestStringMethods" />
-      <option name="METHOD_NAME" value="test_get_rsa_private_ket" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
     <configuration default="false" name="Unittest TestStringMethods.test_get_rsa_public_key" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
@@ -245,6 +206,50 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/__init__.py" />
       <option name="CLASS_NAME" value="TestStringMethods" />
       <option name="METHOD_NAME" value="test_get_rsa_decrypt" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittest TestStringMethods.test_set_new_user" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="rsaChatServer" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/__init__.py" />
+      <option name="CLASS_NAME" value="TestStringMethods" />
+      <option name="METHOD_NAME" value="test_set_new_user" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittest TestStringMethods.test_signin_from_post" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="rsaChatServer" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/__init__.py" />
+      <option name="CLASS_NAME" value="TestStringMethods" />
+      <option name="METHOD_NAME" value="test_signin_from_post" />
       <option name="FOLDER_NAME" value="" />
       <option name="TEST_TYPE" value="TEST_METHOD" />
       <option name="PATTERN" value="" />
@@ -390,18 +395,18 @@
     </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.main" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_setup_mongodb" />
-      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_private_ket" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_public_key" />
-      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_decrypt" />
+      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_public_key" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_decrypt" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_set_new_user" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_signin_from_post" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_decrypt" />
-        <item index="1" class="java.lang.String" itemvalue="Python.main" />
-        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_public_key" />
-        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_private_ket" />
-        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_setup_mongodb" />
+        <item index="0" class="java.lang.String" itemvalue="Python.main" />
+        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_signin_from_post" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_set_new_user" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_decrypt" />
+        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest TestStringMethods.test_get_rsa_public_key" />
       </list>
     </recent_temporary>
   </component>
@@ -419,35 +424,35 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittest_TestStringMethods_test_get_rsa_decrypt - 2017.05.30 at 12h 54m 14s.xml">
-      <configuration name="Unittest TestStringMethods.test_get_rsa_decrypt" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittest_TestStringMethods_test_get_rsa_decrypt - 2017.05.30 at 12h 54m 29s.xml">
-      <configuration name="Unittest TestStringMethods.test_get_rsa_decrypt" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittest_TestStringMethods_test_get_rsa_decrypt - 2017.05.30 at 12h 56m 27s.xml">
-      <configuration name="Unittest TestStringMethods.test_get_rsa_decrypt" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittest_TestStringMethods_test_get_rsa_decrypt - 2017.05.30 at 12h 56m 30s.xml">
       <configuration name="Unittest TestStringMethods.test_get_rsa_decrypt" configurationId="tests" />
     </history-entry>
     <history-entry file="Unittest_TestStringMethods_test_get_rsa_decrypt - 2017.05.30 at 12h 57m 00s.xml">
       <configuration name="Unittest TestStringMethods.test_get_rsa_decrypt" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_TestStringMethods_test_get_rsa_private_ket - 2017.05.30 at 12h 32m 54s.xml">
-      <configuration name="Unittest TestStringMethods.test_get_rsa_private_ket" configurationId="tests" />
+    <history-entry file="Unittest_TestStringMethods_test_get_rsa_decrypt - 2017.05.30 at 13h 18m 11s.xml">
+      <configuration name="Unittest TestStringMethods.test_get_rsa_decrypt" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_TestStringMethods_test_get_rsa_public_key - 2017.05.30 at 12h 33m 40s.xml">
-      <configuration name="Unittest TestStringMethods.test_get_rsa_public_key" configurationId="tests" />
+    <history-entry file="Unittest_TestStringMethods_test_get_rsa_decrypt - 2017.05.30 at 13h 21m 05s.xml">
+      <configuration name="Unittest TestStringMethods.test_get_rsa_decrypt" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_TestStringMethods_test_setup_mongodb - 2017.05.30 at 12h 01m 00s.xml">
-      <configuration name="Unittest TestStringMethods.test_setup_mongodb" configurationId="tests" />
+    <history-entry file="Unittest_TestStringMethods_test_get_rsa_decrypt - 2017.05.30 at 13h 21m 24s.xml">
+      <configuration name="Unittest TestStringMethods.test_get_rsa_decrypt" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_TestStringMethods_test_setup_mongodb - 2017.05.30 at 12h 01m 09s.xml">
-      <configuration name="Unittest TestStringMethods.test_setup_mongodb" configurationId="tests" />
+    <history-entry file="Unittest_TestStringMethods_test_set_new_user - 2017.05.30 at 13h 31m 35s.xml">
+      <configuration name="Unittest TestStringMethods.test_set_new_user" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_TestStringMethods_test_setup_mongodb - 2017.05.30 at 12h 02m 52s.xml">
-      <configuration name="Unittest TestStringMethods.test_setup_mongodb" configurationId="tests" />
+    <history-entry file="Unittest_TestStringMethods_test_set_new_user - 2017.05.30 at 13h 31m 47s.xml">
+      <configuration name="Unittest TestStringMethods.test_set_new_user" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_TestStringMethods_test_set_new_user - 2017.05.30 at 13h 32m 25s.xml">
+      <configuration name="Unittest TestStringMethods.test_set_new_user" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_TestStringMethods_test_signin_from_post - 2017.05.30 at 14h 23m 03s.xml">
+      <configuration name="Unittest TestStringMethods.test_signin_from_post" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_TestStringMethods_test_signin_from_post - 2017.05.30 at 14h 23m 42s.xml">
+      <configuration name="Unittest TestStringMethods.test_signin_from_post" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
@@ -457,11 +462,11 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.329602" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -563,22 +568,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file:///Library/Python/2.7/site-packages/pymongo/collection.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
-          <caret line="131" column="16" lean-forward="false" selection-start-line="131" selection-start-column="16" selection-end-line="131" selection-end-column="16" />
-          <folding>
-            <element signature="e#24#38#0" expanded="true" />
-          </folding>
+          <caret line="656" column="0" lean-forward="false" selection-start-line="656" selection-start-column="0" selection-end-line="656" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="62" column="35" lean-forward="true" selection-start-line="62" selection-start-column="35" selection-end-line="62" selection-end-column="35" />
+        <state relative-caret-position="314">
+          <caret line="69" column="88" lean-forward="true" selection-start-line="69" selection-start-column="88" selection-end-line="69" selection-end-column="88" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="153" column="0" lean-forward="true" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
+          <folding>
+            <element signature="e#24#38#0" expanded="true" />
           </folding>
         </state>
       </provider>

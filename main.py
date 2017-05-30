@@ -35,31 +35,6 @@ def mongodb_connection_test():
         print collection
 
 
-# mongodb first setup
-def setup_mongodb():
-    # global variable
-    global db
-    global users_collection
-    global friend_collection
-    global chat_collection
-    # connection to mongoDB
-    connect = pymongo.MongoClient('localhost', 27017)
-    # create data base
-    if debug:
-        db = connect['TestDataBase']
-    else:
-        db = connect['MainDataBase']
-    users_collection = db['UsersCollection']
-    friend_collection = db['FriendCollection']
-    chat_collection = db['CatCollection']
-
-
-def set_new_user(username, password):
-    global users_collection
-    # TODO: password security
-    return users_collection.insert_one({"username": username, "password": password})
-
-
 def get_aes_encrypt(raw_data, key, iv):
     raw_data_base64 = base64.b64encode(raw_data)
     # 16byte
@@ -140,10 +115,78 @@ def get_rsa_decrypt(encrypt_data_base64):
     return plain_data
 
 
+# mongodb first setup
+def setup_mongodb():
+    # global variable
+    global db
+    global users_collection
+    global friend_collection
+    global chat_collection
+    # connection to mongoDB
+    connect = pymongo.MongoClient('localhost', 27017)
+    # create data base
+    if debug:
+        connect.drop_database('TestDataBase')
+        connect = pymongo.MongoClient('localhost', 27017)
+        db = connect['TestDataBase']
+    else:
+        db = connect['MainDataBase']
+    users_collection = db['UsersCollection']
+    friend_collection = db['FriendCollection']
+    chat_collection = db['CatCollection']
+
+
+def set_new_user(username, password, rsa_public_base64):
+    global users_collection
+    # TODO: password security
+    return users_collection.insert_one({"username": username, "password": password,
+                                        "rsa_public_base64": rsa_public_base64})
+
+
+def set_new_friend(username, friend_username):
+    global friend_collection
+    if friend_collection.find_one({"username": username}) is None:
+        friend_collection.insert_one({"username": username, "friend_list": {friend_username: 1}})
+        return "insert ok"
+    friend_collection.update({"username": username}, {"$set": {"friend_list." + friend_username: 1}})
+    return "update ok"
+
+
+
+def set_now_user_from_post(username, password, rsa_public_key):
+    global users_collection
+    # check username
+    if users_collection.find_one({'username': username}) is not None:
+        return "ng"
+
+    set_new_user(username, password, rsa_public_key)
+    set_new_friend(username, "admin")
+    return signin_from_post(username, password)
+
+
+def signin_from_post(username, password):
+    global users_collection
+    # check username and passsword
+    if users_collection.find_one({'username': username, 'password': password}) is None:
+        return "ng"
+    return "ok"
+
+
 if __name__ == "__main__":
+    setup_mongodb()
+    setup_rsa_keys()
+    """POST"""
+    # create user
+    print set_now_user_from_post("admin", "password", base64.b16encode(get_rsa_public_key().exportKey()))
+    print set_now_user_from_post("hoge", "hogehoge", base64.b16encode(get_rsa_public_key().exportKey()))
+    print set_now_user_from_post("foo", "foofoo", base64.b16encode(get_rsa_public_key().exportKey()))
+    # add user
+    print set_new_friend("hoge", "foo")
+    print set_new_friend("hoge", "fooooooooooooooo")
+
+
     # print base64.b64encode(hashlib.sha256(get_rsa_private_ket().exportKey()).digest())
     """mongoDB"""
-    # setup_mongodb()
 
     # print set_new_user("hoge", "foo").acknowledged
     # print db.name

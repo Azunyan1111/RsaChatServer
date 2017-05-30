@@ -15,7 +15,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(main.chat_collection.name, "CatCollection")
 
     def test_set_new_user(self):
-        self.assertTrue(main.set_new_user("hoge", "foo").acknowledged)
+        self.assertTrue(main.set_new_user("username", "password", "rsa_public_key").acknowledged)
 
     def test_check_rsa_public_key(self):
         self.assertTrue(main.check_rsa_public_key("-----BEGIN PUBLIC KEY-----"
