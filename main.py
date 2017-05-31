@@ -6,13 +6,15 @@ from Crypto import Random
 import hashlib
 import base64
 import os
-
+import string
+import random
+import json
 # this is global variable mongodb
 db = ""
 users_collection = ""
 friend_collection = ""
 chat_collection = ""
-iv = "test iv"
+iv_ = "test_iv"
 
 debug = True
 
@@ -176,17 +178,42 @@ def get_friend_list(username):
     global friend_collection
     return friend_collection.find_one({'username': username}, {'friend_list': True, '_id': False})
 
+
+def get_random_string(length):
+    data = ''.join([random.choice(string.ascii_letters + string.digits) for i in range(length)])
+    return data
+
+
+def get_post_encrypt(raw_post_data):
+    password = get_random_string(32)
+    data_base64_aes = get_aes_encrypt(raw_post_data, password, iv_)
+    data_password_encrypt_json = json.dumps({'data': data_base64_aes, 'password': password})
+    return data_password_encrypt_json
+
+
+def get_post_decrypt(encrypt_data_json):
+    encrypt_data = json.loads(encrypt_data_json)
+    data = encrypt_data['data']
+    password = encrypt_data['password']
+    decrypt_data = get_aes_decrypt(data, password, iv_)
+    return decrypt_data
+
 if __name__ == "__main__":
     setup_mongodb()
     setup_rsa_keys()
+    """Crypt POST"""
+    encrypt_data_ = get_post_encrypt("test_message")
+    print encrypt_data_
+    decrypt_data_ = get_post_decrypt(encrypt_data_)
+    print decrypt_data_
     """POST"""
     # create user
-    print set_now_user_from_post("admin", "password", base64.b16encode(get_rsa_public_key().exportKey()))
-    print set_now_user_from_post("hoge", "hogehoge", base64.b16encode(get_rsa_public_key().exportKey()))
-    print set_now_user_from_post("foo", "foofoo", base64.b16encode(get_rsa_public_key().exportKey()))
+    # print set_now_user_from_post("admin", "password", base64.b16encode(get_rsa_public_key().exportKey()))
+    # print set_now_user_from_post("hoge", "hogehoge", base64.b16encode(get_rsa_public_key().exportKey()))
+    # print set_now_user_from_post("foo", "foofoo", base64.b16encode(get_rsa_public_key().exportKey()))
     # add user
-    print set_new_friend("hoge", "foo")
-    print get_friend_list("hoge")
+    # print set_new_friend("hoge", "foo")
+    # print get_friend_list("hoge")
 
     # print base64.b64encode(hashlib.sha256(get_rsa_private_ket().exportKey()).digest())
     """mongoDB"""
@@ -198,7 +225,7 @@ if __name__ == "__main__":
     # print chat_collection.name
     """AES"""
     # message = "test_message"
-    # password = "test_password"
+    # password = "test_password_hogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge"
     # ivs = "test_iv"
     # encrypt_data = get_aes_encrypt(message, password, ivs)
     # print encrypt_data
