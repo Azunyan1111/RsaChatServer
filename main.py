@@ -188,16 +188,17 @@ def get_random_string(length):
 
 def get_post_encrypt(raw_post_data, public_key):
     password = get_random_string(32)
-    password = get_rsa_encrypt(raw_post_data, public_key)
     data_base64_aes = get_aes_encrypt(raw_post_data, password, iv_)
+    password = get_rsa_encrypt(password, public_key)
     data_password_encrypt_json = json.dumps({'data': data_base64_aes, 'password': password})
     return data_password_encrypt_json
 
 
-def get_post_decrypt(encrypt_data_json):
+def get_post_decrypt(encrypt_data_json, private_key):
     encrypt_data = json.loads(encrypt_data_json)
     data = encrypt_data['data']
     password = encrypt_data['password']
+    password = get_rsa_decrypt(password, private_key)
     decrypt_data = get_aes_decrypt(data, password, iv_)
     return decrypt_data
 
@@ -232,10 +233,10 @@ if __name__ == "__main__":
     setup_mongodb()
     setup_rsa_keys()
     """Crypt POST"""
-    # encrypt_data_ = get_post_encrypt("test_message")
-    # print encrypt_data_
-    # decrypt_data_ = get_post_decrypt(encrypt_data_)
-    # print decrypt_data_
+    encrypt_data_ = get_post_encrypt("test_message", get_rsa_public_key().exportKey())
+    print encrypt_data_
+    decrypt_data_ = get_post_decrypt(encrypt_data_, get_rsa_private_ket().exportKey())
+    print decrypt_data_
     """POST"""
     # create user
     # print set_now_user_from_post("admin", "password", base64.b16encode(get_rsa_public_key().exportKey()))
@@ -264,8 +265,8 @@ if __name__ == "__main__":
 
     """RSA"""
     # setup_rsa_keys()
-    rsa_encrypt = get_rsa_encrypt("test_message", get_rsa_public_key().exportKey())
-    print rsa_encrypt
+    # rsa_encrypt = get_rsa_encrypt("test_message", get_rsa_public_key().exportKey())
+    # print rsa_encrypt
     # print check_rsa_public_key("-----BEGIN PUBLIC KEY-----" +
     #                             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAldk/K2mEeqaGcUna23YS" +
     #                             "nYGkb94TnvMt8pp5/3kAKEZGuyS/EBTiUBxk8B0XqV+TzcOxoIVw2I/8rOt7sPnE" +
@@ -275,5 +276,5 @@ if __name__ == "__main__":
     #                             "14Eo4KkDEtuk2O7coIkdsfRwYqqWQOdrUgZ8jLsRthZIQM84Wkyq34+ItJbouHGx" +
     #                             "AwIDAQAB" +
     #                             "-----END PUBLIC KEY-----")
-    rsa_decrypt = get_rsa_decrypt(rsa_encrypt, get_rsa_private_ket().exportKey())
-    print rsa_decrypt
+    # rsa_decrypt = get_rsa_decrypt(rsa_encrypt, get_rsa_private_ket().exportKey())
+    # print rsa_decrypt
