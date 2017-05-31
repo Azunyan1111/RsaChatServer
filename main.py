@@ -214,10 +214,13 @@ def get_post_decrypt(encrypt_data_json, private_key):
 
 
 # http
-def http_get_server_rsa_public_key():
+def http_get_server_public_key_base64():
     try:
-        public_key = get_rsa_public_key()
-        return public_key
+        public_key = get_rsa_public_key().exportKey()
+        public_key_base64 = base64.b64encode(public_key)
+        public_key_base64_json = json.loads('{"public_key_base64": "' + public_key_base64 + '"}')
+        public_key_base64_json = json.dumps(public_key_base64_json)
+        return public_key_base64_json
     except os.error:
         return "ng"
 
@@ -253,6 +256,9 @@ if __name__ == "__main__":
     setup_rsa_keys()
     """-------------------NO ENCRYPT-------------------"""
 
+    """ get server public_key_base64"""
+    print http_get_server_public_key_base64()
+
     """ new user signup"""
     # new user post data to server. username password pub_key
     key = base64.b64encode(get_rsa_public_key().exportKey())
@@ -274,7 +280,7 @@ if __name__ == "__main__":
     user_json = json.loads(user_json)
     print user_json
     print http_get_friend(user_json)
-    
+
     """-------------------NO ENCRYPT-------------------"""
 
     """Crypt POST"""
