@@ -52,7 +52,8 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(main.get_aes_decrypt("wBCsz/YaEIoMJgMWC4dbfQ==", "test_password", "test_iv"), "test_message")
 
     def test_get_rsa_encrypt(self):
-        self.assertEqual(main.get_rsa_encrypt("test_message"), "l2coZCOhoYkPiWFu7lIMj+p/DZoBnk1tpS76ebEUPC++2XpL4kPYBO"
+        self.assertEqual(main.get_rsa_encrypt("test_message", main.get_rsa_public_key().exportKey()),
+                                                               "l2coZCOhoYkPiWFu7lIMj+p/DZoBnk1tpS76ebEUPC++2XpL4kPYBO"
                                                                "zrmK8NmSZOLfJ78Hcc2CLGJ2WALyLgGK+ETremZp3ZZmezNyY9TH/g"
                                                                "wHh60sASbOYYINJstny9ur5fRh2z9jWAJXqakwmer8LOdpu9EyKGZz"
                                                                "JKj7oJlyJnOtfk+q+lFtImAoePTpoYNh5i5PsXhRWm7nc+SxuQwmtH"
@@ -67,7 +68,8 @@ class TestStringMethods(unittest.TestCase):
                                                 "JKj7oJlyJnOtfk+q+lFtImAoePTpoYNh5i5PsXhRWm7nc+SxuQwmtH"
                                                 "upwMS79Ix/rTEfxZ2WxbEZ/1b20juec3On11V7Hj9t3HeX8tErT9zT"
                                                 "8yOpzjEFWNvcdS7GnybsBw+JoRbRUZY6aOt9sejhEjfa/1uiVUlsUH"
-                                                "I2eZcivIYsqO69UEeg=="), "test_message")
+                                                "I2eZcivIYsqO69UEeg==",
+                                                main.get_rsa_private_ket().exportKey()), "test_message")
 
 
 if __name__ == "__main__":

@@ -105,15 +105,17 @@ def get_random():
     return Random.new().read
 
 
-def get_rsa_encrypt(plain_data):
-    encrypt_data = get_rsa_public_key().publickey().encrypt(plain_data, get_random())[0]
+def get_rsa_encrypt(plain_data, public_key):
+    public_key = RSA.importKey(public_key)
+    encrypt_data = public_key.publickey().encrypt(plain_data, get_random())[0]
     encrypt_data_base64 = base64.b64encode(encrypt_data)
     return encrypt_data_base64
 
 
-def get_rsa_decrypt(encrypt_data_base64):
+def get_rsa_decrypt(encrypt_data_base64, private_key):
+    private_key = RSA.importKey(private_key)
     encrypt_data = base64.b64decode(encrypt_data_base64)
-    plain_data = get_rsa_private_ket().decrypt(encrypt_data)
+    plain_data = private_key.decrypt(encrypt_data)
     return plain_data
 
 
@@ -184,8 +186,9 @@ def get_random_string(length):
     return data
 
 
-def get_post_encrypt(raw_post_data):
+def get_post_encrypt(raw_post_data, public_key):
     password = get_random_string(32)
+    password = get_rsa_encrypt(raw_post_data, public_key)
     data_base64_aes = get_aes_encrypt(raw_post_data, password, iv_)
     data_password_encrypt_json = json.dumps({'data': data_base64_aes, 'password': password})
     return data_password_encrypt_json
@@ -198,14 +201,41 @@ def get_post_decrypt(encrypt_data_json):
     decrypt_data = get_aes_decrypt(data, password, iv_)
     return decrypt_data
 
+
+# http get
+# def http_get_rsa_public_key():
+#     try:
+#         public_key = get_rsa_public_key()
+#         return public_key
+#     except os.error:
+#         return "ng"
+#
+#
+# http set
+# def http_set_new_user(rsa_aes_user_data_json):
+#     try:
+#         decrypt_user_data = get_post_decrypt(rsa_aes_user_data_json)
+#         decrypt_user_data_json = json.loads(decrypt_user_data)
+#
+#         username = decrypt_user_data_json['username']
+#         password = decrypt_user_data_json['password']
+#         public_key = decrypt_user_data_json['public_key']
+#
+#         set_new_user(username, password, public_key)
+#         message = get_post_encrypt("ok")
+#         return "ok"
+#     except os.error:
+#         return "ng"
+
+
 if __name__ == "__main__":
     setup_mongodb()
     setup_rsa_keys()
     """Crypt POST"""
-    encrypt_data_ = get_post_encrypt("test_message")
-    print encrypt_data_
-    decrypt_data_ = get_post_decrypt(encrypt_data_)
-    print decrypt_data_
+    # encrypt_data_ = get_post_encrypt("test_message")
+    # print encrypt_data_
+    # decrypt_data_ = get_post_decrypt(encrypt_data_)
+    # print decrypt_data_
     """POST"""
     # create user
     # print set_now_user_from_post("admin", "password", base64.b16encode(get_rsa_public_key().exportKey()))
@@ -234,8 +264,8 @@ if __name__ == "__main__":
 
     """RSA"""
     # setup_rsa_keys()
-    # rsa_encrypt = get_rsa_encrypt("test_message")
-    # print rsa_encrypt
+    rsa_encrypt = get_rsa_encrypt("test_message", get_rsa_public_key().exportKey())
+    print rsa_encrypt
     # print check_rsa_public_key("-----BEGIN PUBLIC KEY-----" +
     #                             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAldk/K2mEeqaGcUna23YS" +
     #                             "nYGkb94TnvMt8pp5/3kAKEZGuyS/EBTiUBxk8B0XqV+TzcOxoIVw2I/8rOt7sPnE" +
@@ -245,5 +275,5 @@ if __name__ == "__main__":
     #                             "14Eo4KkDEtuk2O7coIkdsfRwYqqWQOdrUgZ8jLsRthZIQM84Wkyq34+ItJbouHGx" +
     #                             "AwIDAQAB" +
     #                             "-----END PUBLIC KEY-----")
-    # rsa_decrypt = get_rsa_decrypt(rsa_encrypt)
-    # print rsa_decrypt
+    rsa_decrypt = get_rsa_decrypt(rsa_encrypt, get_rsa_private_ket().exportKey())
+    print rsa_decrypt
