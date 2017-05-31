@@ -140,11 +140,6 @@ def setup_mongodb():
     chat_collection = db['CatCollection']
 
 
-def set_new_user(username, password, rsa_public_base64):
-    global users_collection
-    # TODO: password security
-    return users_collection.insert_one({"username": username, "password": password,
-                                        "rsa_public_base64": rsa_public_base64})
 
 
 def set_new_friend(username, friend_username):
@@ -156,29 +151,44 @@ def set_new_friend(username, friend_username):
     return "update ok"
 
 
-def set_now_user_from_post(username, password, rsa_public_key):
+def set_mongodb_signup(username, password, public_key_base64):
     global users_collection
     # check username
     if users_collection.find_one({'username': username}) is not None:
         return "crate  ng"
 
-    set_new_user(username, password, rsa_public_key)
-    print set_new_friend(username, "admin")
-    print "crate  ok"
-    return signin_from_post(username, password)
+    # TODO: password security
+    users_collection.insert_one({"username": username, "password": password, "public_key_base64": public_key_base64})
+    # add friend admin.
+    set_new_friend(username, "admin")
+    # signin
+    return set_mongodb_signin(username, password, public_key_base64)
 
 
-def signin_from_post(username, password):
+def set_mongodb_signin(username, password, public_key_base64):
     global users_collection
-    # check username and passsword
+    # check username and password
     if users_collection.find_one({'username': username, 'password': password}) is None:
-        return "signin ng"
-    return "signin ok"
+        return "ng"
+    # update public_key_base64
+    users_collection.update({'username': username}, {"$set": {"public_key_base64": public_key_base64}})
+    return "ok"
 
 
-def get_friend_list(username):
+def get_mongodb_friend_list(username, password):
     global friend_collection
+    global users_collection
+    if users_collection.find_one({'username': username, 'password': password}) is None:
+        return "ng"
     return friend_collection.find_one({'username': username}, {'friend_list': True, '_id': False})
+
+
+def get_mongodb_public_key(username):
+    global users_collection
+    key_base64 = users_collection.find_one({'username': username},
+                                     {'rsa_public_base64': True, '_id': False})['rsa_public_base64']
+    key = base64.b64decode(key_base64)
+    return key
 
 
 def get_random_string(length):
@@ -203,43 +213,86 @@ def get_post_decrypt(encrypt_data_json, private_key):
     return decrypt_data
 
 
-# http get
-# def http_get_rsa_public_key():
-#     try:
-#         public_key = get_rsa_public_key()
-#         return public_key
-#     except os.error:
-#         return "ng"
-#
-#
-# http set
-# def http_set_new_user(rsa_aes_user_data_json):
-#     try:
-#         decrypt_user_data = get_post_decrypt(rsa_aes_user_data_json)
-#         decrypt_user_data_json = json.loads(decrypt_user_data)
-#
-#         username = decrypt_user_data_json['username']
-#         password = decrypt_user_data_json['password']
-#         public_key = decrypt_user_data_json['public_key']
-#
-#         set_new_user(username, password, public_key)
-#         message = get_post_encrypt("ok")
-#         return "ok"
-#     except os.error:
-#         return "ng"
+# http
+def http_get_server_rsa_public_key():
+    try:
+        public_key = get_rsa_public_key()
+        return public_key
+    except os.error:
+        return "ng"
+
+
+# http
+def http_signup(signup_data_json):
+    username = signup_data_json['username']
+    password = signup_data_json['password']
+    public_key_base64 = signup_data_json['public_key_base64']
+    return set_mongodb_signup(username, password, public_key_base64)
+
+
+# http
+def http_signin(signin_data_json):
+    username = signin_data_json['username']
+    password = signin_data_json['password']
+    public_key_base64 = signin_data_json['public_key_base64']
+
+    return set_mongodb_signin(username, password, public_key_base64)
+
+
+# http
+def http_get_friend(username_password_json):
+    username = username_password_json['username']
+    password = username_password_json['password']
+    user_friend_json = get_mongodb_friend_list(username, password)
+    user_friend = json.dumps(user_friend_json)
+    return user_friend
 
 
 if __name__ == "__main__":
     setup_mongodb()
     setup_rsa_keys()
+    """-------------------NO ENCRYPT-------------------"""
+
+    """ new user signup"""
+    # new user post data to server. username password pub_key
+    key = base64.b64encode(get_rsa_public_key().exportKey())
+    user_json = '{"username": "hoge", "password": "hogehoge", "public_key_base64": "' + key + '"}'
+    user_json = json.loads(user_json)
+    print user_json
+    # server
+    print http_signup(user_json)
+
+    """ old user signin"""
+    # old user signin
+    user_json = '{"username": "hoge", "password": "hogehoge", "public_key_base64": "' + key + '"}'
+    user_json = json.loads(user_json)
+    print user_json
+    print http_signin(user_json)
+
+    """ get friend list"""
+    user_json = '{"username": "hoge", "password": "hogehoge"}'
+    user_json = json.loads(user_json)
+    print user_json
+    print http_get_friend(user_json)
+    
+    """-------------------NO ENCRYPT-------------------"""
+
     """Crypt POST"""
-    encrypt_data_ = get_post_encrypt("test_message", get_rsa_public_key().exportKey())
-    print encrypt_data_
-    decrypt_data_ = get_post_decrypt(encrypt_data_, get_rsa_private_ket().exportKey())
-    print decrypt_data_
+    # encrypt_data_ = get_post_encrypt("test_message", get_rsa_public_key().exportKey())
+    # print encrypt_data_
+    # decrypt_data_ = get_post_decrypt(encrypt_data_, get_rsa_private_ket().exportKey())
+    # print decrypt_data_
     """POST"""
     # create user
     # print set_now_user_from_post("admin", "password", base64.b16encode(get_rsa_public_key().exportKey()))
+    #
+    # test new user sent data
+    # user_json = '{"username": "hoge", "password": "hogehoge", "public_key":' +  get_rsa_public_key().exportKey() + '}'
+    # encrypt_user_json = get_post_encrypt(user_json, http_get_server_rsa_public_key().exportKey())
+    #
+    # server
+    # decrypt_data = get_post_encrypt(encrypt_user_json, get_rsa_private_ket().exportKey())
+    # print http_set_new_user(encrypt_user_json)
     # print set_now_user_from_post("hoge", "hogehoge", base64.b16encode(get_rsa_public_key().exportKey()))
     # print set_now_user_from_post("foo", "foofoo", base64.b16encode(get_rsa_public_key().exportKey()))
     # add user
