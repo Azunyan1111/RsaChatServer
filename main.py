@@ -140,55 +140,59 @@ def setup_mongodb():
     chat_collection = db['CatCollection']
 
 
-
-
-def set_new_friend(username, friend_username):
+def set_mongodb_add_friend(username, friend_username, terminal_hash):
     global friend_collection
     if friend_collection.find_one({"username": username}) is None:
-        friend_collection.insert_one({"username": username, "friend_list": {friend_username: 1}})
-        return "insert ok"
-    friend_collection.update({"username": username}, {"$set": {"friend_list." + friend_username: 1}})
-    return "update ok"
+        result = friend_collection.insert_one({"username": username, "friend_list": {friend_username: 1}})
+        return result.acknowledged
+    result = friend_collection.update({"username": username, "terminal_hash": terminal_hash},
+                             {"$set": {"friend_list." + friend_username: 1}})
+    return result.acknowledged
 
 
-def set_mongodb_signup(username, password, public_key_base64):
+def set_mongodb_signup(username, password, public_key_base64, terminal_hash):
     global users_collection
     # check username
     if users_collection.find_one({'username': username}) is not None:
         return "crate  ng"
 
     # TODO: password security
-    users_collection.insert_one({"username": username, "password": password, "public_key_base64": public_key_base64})
+    result = users_collection.insert_one({"username": username, "password": password,
+                                          "public_key_base64": public_key_base64, "terminal_hash": terminal_hash})
+    if result.acknowledged is False:
+        return "insert error"
     # add friend admin.
-    set_new_friend(username, "admin")
+    set_mongodb_add_friend(username, "admin", terminal_hash)
     # signin
-    return set_mongodb_signin(username, password, public_key_base64)
+    return set_mongodb_signin(username, password, public_key_base64, terminal_hash)
 
 
-def set_mongodb_signin(username, password, public_key_base64):
+def set_mongodb_signin(username, password, public_key_base64, terminal_hash):
     global users_collection
     # check username and password
     if users_collection.find_one({'username': username, 'password': password}) is None:
         return "ng"
     # update public_key_base64
-    users_collection.update({'username': username}, {"$set": {"public_key_base64": public_key_base64}})
+    users_collection.update({'username': username}, {"$set": {"public_key_base64": public_key_base64,
+                                                              "terminal_hash": terminal_hash}})
     return "ok"
 
 
-def get_mongodb_friend_list(username, password):
+def get_mongodb_friend_list(username, terminal_hash):
     global friend_collection
     global users_collection
-    if users_collection.find_one({'username': username, 'password': password}) is None:
+    if users_collection.find_one({'username': username, 'terminal_hash': terminal_hash}) is None:
         return "ng"
+
     return friend_collection.find_one({'username': username}, {'friend_list': True, '_id': False})
 
 
 def get_mongodb_public_key(username):
     global users_collection
-    key_base64 = users_collection.find_one({'username': username},
+    public_key_base64 = users_collection.find_one({'username': username},
                                      {'rsa_public_base64': True, '_id': False})['rsa_public_base64']
-    key = base64.b64decode(key_base64)
-    return key
+    public_key = base64.b64decode(public_key_base64)
+    return public_key
 
 
 def get_random_string(length):
@@ -230,7 +234,9 @@ def http_signup(signup_data_json):
     username = signup_data_json['username']
     password = signup_data_json['password']
     public_key_base64 = signup_data_json['public_key_base64']
-    return set_mongodb_signup(username, password, public_key_base64)
+    terminal_hash = signup_data_json['terminal_hash']
+
+    return set_mongodb_signup(username, password, public_key_base64, terminal_hash)
 
 
 # http
@@ -238,18 +244,25 @@ def http_signin(signin_data_json):
     username = signin_data_json['username']
     password = signin_data_json['password']
     public_key_base64 = signin_data_json['public_key_base64']
+    terminal_hash = signin_data_json['terminal_hash']
 
-    return set_mongodb_signin(username, password, public_key_base64)
+    return set_mongodb_signin(username, password, public_key_base64, terminal_hash)
 
 
 # http
-def http_get_friend(username_password_json):
-    username = username_password_json['username']
-    password = username_password_json['password']
-    user_friend_json = get_mongodb_friend_list(username, password)
+def http_get_friend(username_terminal_hash_json):
+    username = username_terminal_hash_json['username']
+    terminal_hash = username_terminal_hash_json['terminal_hash']
+    user_friend_json = get_mongodb_friend_list(username, terminal_hash)
     user_friend = json.dumps(user_friend_json)
     return user_friend
 
+
+# http
+# def http_set_friend(username_password_json):
+#     username = username_password_json['username']
+#     password = username_password_json['password']
+#     set_mongodb_add_friend()
 
 if __name__ == "__main__":
     setup_mongodb()
@@ -257,28 +270,34 @@ if __name__ == "__main__":
     """-------------------NO ENCRYPT-------------------"""
 
     """ get server public_key_base64"""
-    print http_get_server_public_key_base64()
+    print "server_public_key:", http_get_server_public_key_base64()
 
     """ new user signup"""
     # new user post data to server. username password pub_key
     key = base64.b64encode(get_rsa_public_key().exportKey())
-    user_json = '{"username": "hoge", "password": "hogehoge", "public_key_base64": "' + key + '"}'
+    terminal_hash_ = base64.b64encode(hashlib.sha256("this is terminal identification password.").digest())
+    print "terminal_hash:", terminal_hash_
+    user_json = '{"username": "hoge", "password": "hogehoge",' \
+                ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
     user_json = json.loads(user_json)
-    print user_json
+    print "signup_data:", user_json
     # server
     print http_signup(user_json)
 
     """ old user signin"""
     # old user signin
-    user_json = '{"username": "hoge", "password": "hogehoge", "public_key_base64": "' + key + '"}'
+    user_json = '{"username": "hoge", "password": "hogehoge", ' \
+                ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
     user_json = json.loads(user_json)
-    print user_json
+    print "signin_data:", user_json
     print http_signin(user_json)
 
+    """ user add friend"""
+
     """ get friend list"""
-    user_json = '{"username": "hoge", "password": "hogehoge"}'
+    user_json = '{"username": "hoge", "terminal_hash": "' + terminal_hash_ + '"}'
     user_json = json.loads(user_json)
-    print user_json
+    print "friend_data:", user_json
     print http_get_friend(user_json)
 
     """-------------------NO ENCRYPT-------------------"""
