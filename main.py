@@ -142,12 +142,12 @@ def setup_mongodb():
 
 def set_mongodb_add_friend(username, friend_username, terminal_hash):
     global friend_collection
-    if friend_collection.find_one({"username": username}) is None:
-        result = friend_collection.insert_one({"username": username, "friend_list": {friend_username: 1}})
-        return result.acknowledged
-    result = friend_collection.update({"username": username, "terminal_hash": terminal_hash},
+    if friend_collection.find_one({"username": username, "terminal_hash": terminal_hash}) is None:
+        friend_collection.insert_one({"username": username, "friend_list": {friend_username: 1}})
+        return "ok"
+    friend_collection.update({"username": username, "terminal_hash": terminal_hash},
                              {"$set": {"friend_list." + friend_username: 1}})
-    return result.acknowledged
+    return "ok"
 
 
 def set_mongodb_signup(username, password, public_key_base64, terminal_hash):
@@ -157,10 +157,8 @@ def set_mongodb_signup(username, password, public_key_base64, terminal_hash):
         return "crate  ng"
 
     # TODO: password security
-    result = users_collection.insert_one({"username": username, "password": password,
-                                          "public_key_base64": public_key_base64, "terminal_hash": terminal_hash})
-    if result.acknowledged is False:
-        return "insert error"
+    users_collection.insert_one({"username": username, "password": password,
+                                 "public_key_base64": public_key_base64, "terminal_hash": terminal_hash})
     # add friend admin.
     set_mongodb_add_friend(username, "admin", terminal_hash)
     # signin
@@ -259,10 +257,12 @@ def http_get_friend(username_terminal_hash_json):
 
 
 # http
-# def http_set_friend(username_password_json):
-#     username = username_password_json['username']
-#     password = username_password_json['password']
-#     set_mongodb_add_friend()
+def http_set_friend(username_password_json):
+    username = username_password_json['username']
+    friend_username = username_password_json['friend_username']
+    terminal_hash = username_password_json['terminal_hash']
+    set_mongodb_add_friend(username, friend_username, terminal_hash)
+    return "ok"
 
 if __name__ == "__main__":
     setup_mongodb()
@@ -280,7 +280,7 @@ if __name__ == "__main__":
     user_json = '{"username": "hoge", "password": "hogehoge",' \
                 ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
     user_json = json.loads(user_json)
-    print "signup_data:", user_json
+    print "signup_data      :", user_json
     # server
     print http_signup(user_json)
 
@@ -289,16 +289,20 @@ if __name__ == "__main__":
     user_json = '{"username": "hoge", "password": "hogehoge", ' \
                 ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
     user_json = json.loads(user_json)
-    print "signin_data:", user_json
+    print "signin_data      :", user_json
     print http_signin(user_json)
 
-    """ user add friend"""
-
-    """ get friend list"""
+    """ user get friend"""
     user_json = '{"username": "hoge", "terminal_hash": "' + terminal_hash_ + '"}'
     user_json = json.loads(user_json)
-    print "friend_data:", user_json
+    print "friend_get_data  :", user_json
     print http_get_friend(user_json)
+
+    """ user set friend"""
+    user_json = '{"username": "hoge", "friend_username": "foo", "terminal_hash": "' + terminal_hash_ + '"}'
+    user_json = json.loads(user_json)
+    print "friend_add_data  :", user_json
+    print http_set_friend(user_json)
 
     """-------------------NO ENCRYPT-------------------"""
 
