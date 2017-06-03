@@ -1,6 +1,9 @@
 <component name="ProjectDictionaryState">
   <dictionary name="admin">
     <words>
+      <w>foofoo</w>
+      <w>hoge</w>
+      <w>hogehoge</w>
       <w>mongo</w>
       <w>pycrypto</w>
       <w>pymongo</w>

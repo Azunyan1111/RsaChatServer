@@ -50,39 +50,39 @@ def http_get_server_public_key_base64():
 
 
 # http
-def http_signup(signup_data_json):
-    username = signup_data_json['username']
-    password = signup_data_json['password']
-    public_key_base64 = signup_data_json['public_key_base64']
-    terminal_hash = signup_data_json['terminal_hash']
+def http_signup(username, password, public_key_base64, terminal_hash):
+    # username = signup_data_json['username']
+    # password = signup_data_json['password']
+    # public_key_base64 = signup_data_json['public_key_base64']
+    # terminal_hash = signup_data_json['terminal_hash']
 
     return db.set_signup(username, password, public_key_base64, terminal_hash)
 
 
 # http
-def http_signin(signin_data_json):
-    username = signin_data_json['username']
-    password = signin_data_json['password']
-    public_key_base64 = signin_data_json['public_key_base64']
-    terminal_hash = signin_data_json['terminal_hash']
+def http_signin(username, password, public_key_base64, terminal_hash):
+    # username = signin_data_json['username']
+    # password = signin_data_json['password']
+    # public_key_base64 = signin_data_json['public_key_base64']
+    # terminal_hash = signin_data_json['terminal_hash']
 
     return db.set_signin(username, password, public_key_base64, terminal_hash)
 
 
 # http
-def http_get_friend(username_terminal_hash_json):
-    username = username_terminal_hash_json['username']
-    terminal_hash = username_terminal_hash_json['terminal_hash']
+def http_get_friend(username, terminal_hash):
+    # username = username_terminal_hash_json['username']
+    # terminal_hash = username_terminal_hash_json['terminal_hash']
     user_friend_json = db.get_user_friend(username, terminal_hash)
     user_friend = json.dumps(user_friend_json)
     return user_friend
 
 
 # http
-def http_set_friend(username_password_json):
-    username = username_password_json['username']
-    friend_username = username_password_json['friend_username']
-    terminal_hash = username_password_json['terminal_hash']
+def http_set_friend(username, friend_username, terminal_hash):
+    # username = username_password_json['username']
+    # friend_username = username_password_json['friend_username']
+    # terminal_hash = username_password_json['terminal_hash']
     db.set_add_friend(username, friend_username, terminal_hash)
     return "ok"
 
@@ -100,33 +100,47 @@ if __name__ == "__main__":
     # new user post data to server. username password pub_key
     key = base64.b64encode(MyCrypto.get_rsa_public_key().exportKey())
     terminal_hash_ = base64.b64encode(hashlib.sha256("this is terminal identification password.").digest())
-    print "terminal_hash:", terminal_hash_
-    user_json = '{"username": "hoge", "password": "hogehoge",' \
-                ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
-    user_json = json.loads(user_json)
-    print "signup_data      :", user_json
+    # print "terminal_hash:", terminal_hash_
+    # user_json = '{"username": "hoge", "password": "hogehoge",' \
+    #             ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
+    # user_json = json.loads(user_json)
+    # print "signup_data      :", user_json
     # server
-    print http_signup(user_json)
+    print http_signup("admin", "admin", key, terminal_hash_)
+    print http_signup("hoge", "hogehoge", key, terminal_hash_)
+    print http_signup("foo", "foofoo", key, terminal_hash_)
 
     """ old user signin"""
     # old user signin
-    user_json = '{"username": "hoge", "password": "hogehoge", ' \
-                ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
-    user_json = json.loads(user_json)
-    print "signin_data      :", user_json
-    print http_signin(user_json)
+    # user_json = '{"username": "hoge", "password": "hogehoge", ' \
+    #             ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
+    # user_json = json.loads(user_json)
+    # print "signin_data      :", user_json
+    print http_signin("admin", "admin", key, terminal_hash_)
+    print http_signin("hoge", "hogehoge", key, terminal_hash_)
+    print http_signin("foo", "foofoo", key, terminal_hash_)
 
     """ user get friend"""
-    user_json = '{"username": "hoge", "terminal_hash": "' + terminal_hash_ + '"}'
-    user_json = json.loads(user_json)
-    print "friend_get_data  :", user_json
-    print http_get_friend(user_json)
+    # user_json = '{"username": "hoge", "terminal_hash": "' + terminal_hash_ + '"}'
+    # user_json = json.loads(user_json)
+    # print "friend_get_data  :", user_json
+    print http_get_friend("admin", terminal_hash_)
+    print http_get_friend("hoge", terminal_hash_)
+    print http_get_friend("foo", terminal_hash_)
 
     """ user set friend"""
-    user_json = '{"username": "hoge", "friend_username": "foo", "terminal_hash": "' + terminal_hash_ + '"}'
-    user_json = json.loads(user_json)
-    print "friend_add_data  :", user_json
-    print http_set_friend(user_json)
+    # user_json = '{"username": "hoge", "friend_username": "foo", "terminal_hash": "' + terminal_hash_ + '"}'
+    # user_json = json.loads(user_json)
+    # print "friend_add_data  :", user_json
+    print http_set_friend("hoge", "foo", terminal_hash_)
+
+    """ user get friend"""
+    print http_get_friend("admin", terminal_hash_)
+    print http_get_friend("hoge", terminal_hash_)
+    print http_get_friend("foo", terminal_hash_)
+
+
+
 
     """-------------------NO ENCRYPT-------------------"""
 
