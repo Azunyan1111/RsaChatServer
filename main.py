@@ -6,7 +6,7 @@ import string
 import random
 import json
 # my crypt
-import my_crypter
+import MyCrypto
 import MyMongoDb
 # this is global variable mongodb
 db = ""
@@ -40,7 +40,7 @@ def get_random_string(length):
 def http_get_server_public_key_base64():
     try:
         # TODO: rsa
-        public_key = my_crypter.get_rsa_public_key().exportKey()
+        public_key = MyCrypto.get_rsa_public_key().exportKey()
         public_key_base64 = base64.b64encode(public_key)
         public_key_base64_json = json.loads('{"public_key_base64": "' + public_key_base64 + '"}')
         public_key_base64_json = json.dumps(public_key_base64_json)
@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
     """ new user signup"""
     # new user post data to server. username password pub_key
-    key = base64.b64encode(my_crypter.get_rsa_public_key().exportKey())
+    key = base64.b64encode(MyCrypto.get_rsa_public_key().exportKey())
     terminal_hash_ = base64.b64encode(hashlib.sha256("this is terminal identification password.").digest())
     print "terminal_hash:", terminal_hash_
     user_json = '{"username": "hoge", "password": "hogehoge",' \
