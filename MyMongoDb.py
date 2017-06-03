@@ -60,6 +60,10 @@ class MyMongoDb:
             return "ok"
         # old user add friend
         self.friend_collection.update({"username": username}, {"$set": {"friend_list." + friend_username: 1}})
+
+        # friend user add user
+        self.friend_collection.update({"username": friend_username}, {"$set": {"friend_list." + username: 2}})
+        
         return "ok"
 
     def get_user_friend(self, username, terminal_hash):
