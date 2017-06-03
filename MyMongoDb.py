@@ -1,5 +1,7 @@
 import pymongo
 import base64
+# from datetime import datetime
+import time
 
 
 class MyMongoDb:
@@ -11,11 +13,12 @@ class MyMongoDb:
         self.users_collection = ""
         self.friend_collection = ""
         self.chat_collection = ""
+        self.debug = debug
 
         # connection to mongoDB
         self.connect = pymongo.MongoClient('localhost', 27017)
         # create data base
-        if debug:
+        if self.debug:
             self.connect.drop_database("Test" + data_base_name)
             self.connect = pymongo.MongoClient('localhost', 27017)
             self.database = self.connect["Test" + data_base_name]
@@ -97,4 +100,41 @@ class MyMongoDb:
     def get_chat_collection(self):
         return self.chat_collection
 
+    def set_chat(self, send_username, receive_username, chat_data, send_terminal_hash):
+        # check username and password
+        # if self.users_collection.find_one({'username': send_username, 'terminal_hash': send_terminal_hash}) is None:
+        #     return "send error"
+
+        now_time = str(time.time()).replace(".", ",")
+        print time.time()
+        if self.debug:
+            time.sleep(1)
+        # new chat
+        if self.chat_collection.find_one({"my_username-friend_username": send_username + "-" + receive_username}) is None:
+            result = self.chat_collection.insert_one({"my_username-friend_username": send_username + "-" +
+                                                      receive_username, "chats": {now_time: {"chat": chat_data}}})
+            return "ok" if result.acknowledged else "ng"
+
+        result = self.chat_collection.update({'my_username-friend_username': send_username + "-" + receive_username},
+                                           {"$set": {"chats." + now_time: {"chat": chat_data}}})
+        print result
+        return "ok" if result['updatedExisting'] else "ng"
+
+    def get_chat(self, my_username, friend_username, terminal_hash):
+        # check username and password
+        # if self.users_collection.find_one({'username': send_username, 'terminal_hash': send_terminal_hash}) is None:
+        #     return "send error"
+        return self.chat_collection.find_one({"my_username-friend_username": my_username + "-" + friend_username},
+                                             {"_id": False})
+
+
+if __name__ == "__main__":
+    db = MyMongoDb("Test", True)
+
+    print db.set_chat("hoge", "foo", "I love hoge.", "hash")
+    print db.get_chat("hoge", "foo", "hash")
+    print db.set_chat("foo", "hoge", "Fuckin foo", "hash")
+    print db.get_chat("foo", "hoge", "hash")
+    print db.set_chat("foo", "hoge", "foo is my life", "hash")
+    print db.get_chat("foo", "hoge", "hash")
 
