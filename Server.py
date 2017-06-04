@@ -67,6 +67,35 @@ def get_friend():
         return "Error: 400: Bad Request"
 
 
+@app.route('/set_chat', methods=['GET', 'POST'])
+def set_chat():
+    if request.method == 'POST' or request.method == 'GET':
+
+        send_username = request.form['send_username']
+        receive_username = request.form['receive_username']
+        chat_data = request.form['chat_data']
+        terminal_hash = request.form['terminal_hash']
+
+        return main.http_set_chat(send_username, receive_username, chat_data, terminal_hash)
+        # return "hello world"
+    else:
+        return "Error: 400: Bad Request"
+
+
+@app.route('/get_chat', methods=['GET', 'POST'])
+def get_chat():
+    if request.method == 'POST' or request.method == 'GET':
+
+        username = request.form['username']
+        friend_username = request.form['friend_username']
+        terminal_hash = request.form['terminal_hash']
+
+        return main.http_get_chat(username, friend_username, terminal_hash)
+        # return "hello world"
+    else:
+        return "Error: 400: Bad Request"
+
+
 if __name__ == '__main__':
     main.db = MyMongoDb.MyMongoDb("MainDataBase", True)
     app.run(host='0.0.0.0')

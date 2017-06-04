@@ -67,8 +67,6 @@ class MyMongoDb:
         # friend user add user
         self.friend_collection.update({"username": friend_username}, {"$set": {"friend_list." + username: 2}})
 
-
-
         return "ok"
 
     def get_user_friend(self, username, terminal_hash):
@@ -102,30 +100,33 @@ class MyMongoDb:
 
     def set_chat(self, send_username, receive_username, chat_data, send_terminal_hash):
         # check username and password
-        # if self.users_collection.find_one({'username': send_username, 'terminal_hash': send_terminal_hash}) is None:
-        #     return "send error"
+        if self.users_collection.find_one({'username': send_username, 'terminal_hash': send_terminal_hash}) is None:
+            return "send error"
 
         now_time = str(time.time()).replace(".", ",")
-        print time.time()
         if self.debug:
             time.sleep(1)
         # new chat
-        if self.chat_collection.find_one({"my_username-friend_username": send_username + "-" + receive_username}) is None:
-            result = self.chat_collection.insert_one({"my_username-friend_username": send_username + "-" +
-                                                      receive_username, "chats": {now_time: {"chat": chat_data}}})
-            return "ok" if result.acknowledged else "ng"
+        if self.chat_collection.find_one({"ids": send_username + "-" + receive_username}) is None:
+            result = self.chat_collection.insert_one({"ids": send_username + "-" + receive_username,
+                                                      "chats": {now_time: {"chat": chat_data}}})
+            result2 = self.chat_collection.insert_one({"ids": receive_username + "-" + send_username,
+                                                       "chats": {now_time: {"chat": chat_data}}})
+            return "ok" if result.acknowledged and result2.acknowledged else "ng"
 
-        result = self.chat_collection.update({'my_username-friend_username': send_username + "-" + receive_username},
-                                           {"$set": {"chats." + now_time: {"chat": chat_data}}})
-        print result
-        return "ok" if result['updatedExisting'] else "ng"
+        result = self.chat_collection.update({'ids': send_username + "-" + receive_username},
+                                             {"$set": {"chats." + now_time: {"chat": chat_data}}})
+        result2 = self.chat_collection.update({'ids': receive_username + "-" + send_username},
+                                              {"$set": {"chats." + now_time: {"chat": chat_data}}})
+
+        return "ok" if result['updatedExisting'] and result2['updatedExisting'] else "ng"
 
     def get_chat(self, my_username, friend_username, terminal_hash):
         # check username and password
-        # if self.users_collection.find_one({'username': send_username, 'terminal_hash': send_terminal_hash}) is None:
-        #     return "send error"
-        return self.chat_collection.find_one({"my_username-friend_username": my_username + "-" + friend_username},
-                                             {"_id": False})
+        if self.users_collection.find_one({'username': my_username, 'terminal_hash': terminal_hash}) is None:
+            return "get error"
+
+        return self.chat_collection.find_one({"ids": my_username + "-" + friend_username}, {"_id": False})
 
 
 if __name__ == "__main__":
