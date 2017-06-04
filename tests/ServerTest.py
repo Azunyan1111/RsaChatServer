@@ -62,6 +62,8 @@ if __name__ == "__main__":
     get_server_public_key_base64()
     signup("admin", "admin", "base64", "hash")
     signup("hoge", "hogehoge", "base64", "hash")
+    signup("hoge_", "hogehoge_", "base64", "hash")
+    signup("hoge()", "hogehoge", "base64", "hash")
     signin()
     set_friend()
     get_friend()
