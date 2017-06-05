@@ -32,11 +32,11 @@ class MyMongoDb:
 
     def set_signup(self, username, password, public_key_base64, terminal_hash):
         # check username
-        if self.users_collection.find_one({'username': username}) is not None:
-            return "username is used"
-        # check username
         if re.search(r'^[A-Za-z0-9_]{1,32}$', username) is None:
             return "can not use username."
+        # check username
+        if self.users_collection.find_one({'username': username}) is not None:
+            return "username is used"
 
         # TODO: password security
         self.users_collection.insert_one({"username": username, "password": password,

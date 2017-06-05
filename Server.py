@@ -13,11 +13,12 @@ def get_server_public_key_base64():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
 
-        username = request.form['username']
-        password = request.form['password']
-        public_key_base64 = request.form['public_key_base64']
-        terminal_hash = request.form['terminal_hash']
+        username = data_json['username']
+        password = data_json['password']
+        public_key_base64 = data_json['public_key_base64']
+        terminal_hash = data_json['terminal_hash']
 
         return main.http_signup(username, password, public_key_base64, terminal_hash)
         # return "hello world"
@@ -28,11 +29,12 @@ def signup():
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
 
-        username = request.form['username']
-        password = request.form['password']
-        public_key_base64 = request.form['public_key_base64']
-        terminal_hash = request.form['terminal_hash']
+        username = data_json['username']
+        password = data_json['password']
+        public_key_base64 = data_json['public_key_base64']
+        terminal_hash = data_json['terminal_hash']
 
         return main.http_signin(username, password, public_key_base64, terminal_hash)
         # return "hello world"
