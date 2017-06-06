@@ -23,7 +23,7 @@ def signup():
         return main.http_signup(username, password, public_key_base64, terminal_hash)
         # return "hello world"
     else:
-        return "Error: 400: Bad Request"
+        return "Error: 400: Bad Request.HOGE"
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -45,10 +45,11 @@ def signin():
 @app.route('/set_friend', methods=['GET', 'POST'])
 def set_friend():
     if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
 
-        username = request.form['username']
-        friend_username = request.form['friend_username']
-        terminal_hash = request.form['terminal_hash']
+        username = data_json['username']
+        friend_username = data_json['friend_username']
+        terminal_hash = data_json['terminal_hash']
 
         return main.http_set_friend(username, friend_username, terminal_hash)
         # return "hello world"
@@ -59,9 +60,10 @@ def set_friend():
 @app.route('/get_friend', methods=['GET', 'POST'])
 def get_friend():
     if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
 
-        username = request.form['username']
-        terminal_hash = request.form['terminal_hash']
+        username = data_json['username']
+        terminal_hash = data_json['terminal_hash']
 
         return main.http_get_friend(username, terminal_hash)
         # return "hello world"

@@ -5,6 +5,7 @@ import os
 import string
 import random
 import json
+import re
 # my crypt
 import MyCrypto
 import MyMongoDb
@@ -74,7 +75,12 @@ def http_get_friend(username, terminal_hash):
     # username = username_terminal_hash_json['username']
     # terminal_hash = username_terminal_hash_json['terminal_hash']
     user_friend_json = db.get_user_friend(username, terminal_hash)
-    user_friend = json.dumps(user_friend_json)
+    user_friend = user_friend_json['friend_list']['_1']
+    user_friend = json.dumps(user_friend)
+    user_friend = re.sub(r'"', '', user_friend)
+    user_friend = re.sub(r'\[', '', user_friend)
+    user_friend = re.sub(r'\]', '', user_friend)
+    user_friend = re.sub(r' ', '', user_friend)
     return user_friend
 
 
@@ -83,8 +89,7 @@ def http_set_friend(username, friend_username, terminal_hash):
     # username = username_password_json['username']
     # friend_username = username_password_json['friend_username']
     # terminal_hash = username_password_json['terminal_hash']
-    db.set_add_friend(username, friend_username, terminal_hash)
-    return "ok"
+    return db.set_add_friend(username, friend_username, terminal_hash)
 
 
 def http_set_chat(send_username, receive_username, chat_data, terminal_hash):

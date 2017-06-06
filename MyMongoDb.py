@@ -63,13 +63,19 @@ class MyMongoDb:
         # friend collection check
         if self.friend_collection.find_one({"username": username}) is None:
             # new user data insert collection
-            self.friend_collection.insert_one({"username": username, "friend_list": {friend_username: 1}})
+            self.friend_collection.insert_one({"username": username, "friend_list": {"_1": [friend_username]}})
             return "ok"
+        # check friend_username
+        if self.friend_collection.find_one({"username": username, "friend_list._1": friend_username}) is not None:
+            return "added"
+        # get all friend. add friend
+        friend_list = self.friend_collection.find_one({"username": username}, {"_id": False, "friend_list._1": True})
+        friend_list = friend_list['friend_list']['_1']
+        friend_list.append(friend_username)
         # old user add friend
-        self.friend_collection.update({"username": username}, {"$set": {"friend_list." + friend_username: 1}})
-
+        self.friend_collection.update({"username": username}, {"$set": {"friend_list._1": friend_list}})
         # friend user add user
-        self.friend_collection.update({"username": friend_username}, {"$set": {"friend_list." + username: 2}})
+        self.friend_collection.update({"username": friend_username}, {"$set": {"friend_list._1": friend_list}})
 
         return "ok"
 
@@ -78,7 +84,8 @@ class MyMongoDb:
         if self.users_collection.find_one({"username": username, "terminal_hash": terminal_hash}) is None:
             return "hacking error"
 
-        friend_list = self.friend_collection.find_one({'username': username}, {'friend_list': True, '_id': False})
+        friend_list = self.friend_collection.find_one({'username': username},
+                                                      {'friend_list._1': True, 'count': True, '_id': False})
         return friend_list
 
     # this is server only read
