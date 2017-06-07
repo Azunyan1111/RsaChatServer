@@ -74,11 +74,17 @@ def get_friend():
 @app.route('/set_chat', methods=['GET', 'POST'])
 def set_chat():
     if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
 
-        send_username = request.form['send_username']
-        receive_username = request.form['receive_username']
-        chat_data = request.form['chat_data']
-        terminal_hash = request.form['terminal_hash']
+        send_username = data_json['send_username']
+        receive_username = data_json['receive_username']
+        chat_data = data_json['chat_data']
+        terminal_hash = data_json['terminal_hash']
+
+        # send_username = request.form['send_username']
+        # receive_username = request.form['receive_username']
+        # chat_data = request.form['chat_data']
+        # terminal_hash = request.form['terminal_hash']
 
         return main.http_set_chat(send_username, receive_username, chat_data, terminal_hash)
         # return "hello world"
@@ -89,10 +95,11 @@ def set_chat():
 @app.route('/get_chat', methods=['GET', 'POST'])
 def get_chat():
     if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
 
-        username = request.form['username']
-        friend_username = request.form['friend_username']
-        terminal_hash = request.form['terminal_hash']
+        username = data_json['username']
+        friend_username = data_json['friend_username']
+        terminal_hash = data_json['terminal_hash']
 
         return main.http_get_chat(username, friend_username, terminal_hash)
         # return "hello world"

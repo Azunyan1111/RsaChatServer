@@ -99,6 +99,7 @@ def http_set_chat(send_username, receive_username, chat_data, terminal_hash):
 
 def http_get_chat(my_username, friend_username, terminal_hash):
     chat_data = db.get_chat(my_username, friend_username, terminal_hash)
+    chat_data = chat_data['chats']
     chat_data_json = json.dumps(chat_data)
     return chat_data_json
 
@@ -159,7 +160,7 @@ if __name__ == "__main__":
 
     print http_set_chat("hoge", "foo", "I love hoge.", terminal_hash_)
     print http_get_chat("hoge", "foo", terminal_hash_)
-    print http_set_chat("foo", "hoge", "Fuckin foo", terminal_hash_)
+    print http_set_chat("foo", "hoge", "Fuckin hoge", terminal_hash_)
     print http_get_chat("foo", "hoge", terminal_hash_)
     print http_set_chat("foo", "hoge", "foo is my life", terminal_hash_)
     print http_get_chat("foo", "hoge", terminal_hash_)

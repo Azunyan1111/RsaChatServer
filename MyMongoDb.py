@@ -120,15 +120,15 @@ class MyMongoDb:
         # new chat
         if self.chat_collection.find_one({"ids": send_username + "-" + receive_username}) is None:
             result = self.chat_collection.insert_one({"ids": send_username + "-" + receive_username,
-                                                      "chats": {now_time: {"chat": chat_data}}})
+                                                      "chats": {now_time: {"chat": chat_data, "user": send_username}}})
             result2 = self.chat_collection.insert_one({"ids": receive_username + "-" + send_username,
-                                                       "chats": {now_time: {"chat": chat_data}}})
+                                                       "chats": {now_time: {"chat": chat_data, "user": send_username}}})
             return "ok" if result.acknowledged and result2.acknowledged else "ng"
 
         result = self.chat_collection.update({'ids': send_username + "-" + receive_username},
-                                             {"$set": {"chats." + now_time: {"chat": chat_data}}})
+                                             {"$set": {"chats." + now_time: {"chat": chat_data, "user": send_username}}})
         result2 = self.chat_collection.update({'ids': receive_username + "-" + send_username},
-                                              {"$set": {"chats." + now_time: {"chat": chat_data}}})
+                                              {"$set": {"chats." + now_time: {"chat": chat_data, "user": send_username}}})
 
         return "ok" if result['updatedExisting'] and result2['updatedExisting'] else "ng"
 

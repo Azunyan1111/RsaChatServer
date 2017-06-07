@@ -77,10 +77,10 @@ if __name__ == "__main__":
     set_friend("admin", "foo")
     get_friend()
 
-    # set_chat("admin", "hoge", "fuck", "hash")
-    # get_chat("admin", "hoge", "hash")
-    # get_chat("hoge", "admin", "hash")
-    # set_chat("hoge", "admin", "admin is noob", "hash")
-    # get_chat("admin", "hoge", "hash")
-    # get_chat("hoge", "admin", "hash")
+    set_chat("admin", "hoge", "fuck", "hash")
+    get_chat("admin", "hoge", "hash")
+    get_chat("hoge", "admin", "hash")
+    set_chat("hoge", "admin", "admin is noob", "hash")
+    get_chat("admin", "hoge", "hash")
+    get_chat("hoge", "admin", "hash")
 
