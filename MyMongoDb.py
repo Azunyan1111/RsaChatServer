@@ -3,6 +3,7 @@ import base64
 # from datetime import datetime
 import time
 import re
+from datetime import datetime, timedelta
 
 
 class MyMongoDb:
@@ -114,21 +115,38 @@ class MyMongoDb:
         if self.users_collection.find_one({'username': send_username, 'terminal_hash': send_terminal_hash}) is None:
             return "send error"
 
-        now_time = str(time.time()).replace(".", ",")
+        now_time = str(datetime.now()).replace(".", ",")
         if self.debug:
             time.sleep(1)
         # new chat
         if self.chat_collection.find_one({"ids": send_username + "-" + receive_username}) is None:
             result = self.chat_collection.insert_one({"ids": send_username + "-" + receive_username,
-                                                      "chats": {now_time: {"chat": chat_data, "user": send_username}}})
+                                                      "chats": {"000000001":
+                                                                {"chat": chat_data,
+                                                                 "user": send_username,
+                                                                 "data": now_time}},
+                                                      "count": 2})
             result2 = self.chat_collection.insert_one({"ids": receive_username + "-" + send_username,
-                                                       "chats": {now_time: {"chat": chat_data, "user": send_username}}})
+                                                      "chats": {"000000001":
+                                                                {"chat": chat_data,
+                                                                 "user": send_username,
+                                                                 "data": now_time}},
+                                                       "count": 2})
             return "ok" if result.acknowledged and result2.acknowledged else "ng"
-
+        count = str(self.chat_collection.find_one({"ids": send_username + "-" + receive_username},
+                                                  {"count": True, "_id": False})['count'])
+        ran = ""
+        for i in range(0, (9 - len(count))):
+            ran += "0"
+        count = ran + count
         result = self.chat_collection.update({'ids': send_username + "-" + receive_username},
-                                             {"$set": {"chats." + now_time: {"chat": chat_data, "user": send_username}}})
+                                             {"$set": {"chats." + count: {"chat": chat_data, "user": send_username,
+                                                       "data": now_time}},
+                                              "$inc": {"count": 1}})
         result2 = self.chat_collection.update({'ids': receive_username + "-" + send_username},
-                                              {"$set": {"chats." + now_time: {"chat": chat_data, "user": send_username}}})
+                                              {"$set": {"chats." + count: {"chat": chat_data, "user": send_username,
+                                                        "data": now_time}},
+                                              "$inc": {"count": 1}})
 
         return "ok" if result['updatedExisting'] and result2['updatedExisting'] else "ng"
 
@@ -136,7 +154,6 @@ class MyMongoDb:
         # check username and password
         if self.users_collection.find_one({'username': my_username, 'terminal_hash': terminal_hash}) is None:
             return "get error"
-
         return self.chat_collection.find_one({"ids": my_username + "-" + friend_username}, {"_id": False})
 
 
