@@ -4,6 +4,7 @@ import base64
 import time
 import re
 from datetime import datetime, timedelta
+from collections import OrderedDict
 
 
 class MyMongoDb:
@@ -18,11 +19,11 @@ class MyMongoDb:
         self.debug = debug
 
         # connection to mongoDB
-        self.connect = pymongo.MongoClient('localhost', 27017)
+        self.connect = pymongo.MongoClient('localhost', 27017, document_class=OrderedDict)
         # create data base
         if self.debug:
             self.connect.drop_database("Test" + data_base_name)
-            self.connect = pymongo.MongoClient('localhost', 27017)
+            self.connect = pymongo.MongoClient('localhost', 27017, document_class=OrderedDict)
             self.database = self.connect["Test" + data_base_name]
         else:
             self.database = self.connect[data_base_name]
@@ -121,32 +122,23 @@ class MyMongoDb:
         # new chat
         if self.chat_collection.find_one({"ids": send_username + "-" + receive_username}) is None:
             result = self.chat_collection.insert_one({"ids": send_username + "-" + receive_username,
-                                                      "chats": {"000000001":
+                                                      "chats": {now_time:
                                                                 {"chat": chat_data,
                                                                  "user": send_username,
-                                                                 "data": now_time}},
-                                                      "count": 2})
+                                                                 "data": now_time}}})
             result2 = self.chat_collection.insert_one({"ids": receive_username + "-" + send_username,
-                                                      "chats": {"000000001":
+                                                      "chats": {now_time:
                                                                 {"chat": chat_data,
                                                                  "user": send_username,
-                                                                 "data": now_time}},
-                                                       "count": 2})
+                                                                 "data": now_time}}})
+
             return "ok" if result.acknowledged and result2.acknowledged else "ng"
-        count = str(self.chat_collection.find_one({"ids": send_username + "-" + receive_username},
-                                                  {"count": True, "_id": False})['count'])
-        ran = ""
-        for i in range(0, (9 - len(count))):
-            ran += "0"
-        count = ran + count
         result = self.chat_collection.update({'ids': send_username + "-" + receive_username},
-                                             {"$set": {"chats." + count: {"chat": chat_data, "user": send_username,
-                                                       "data": now_time}},
-                                              "$inc": {"count": 1}})
+                                             {"$set": {"chats." + now_time: {"chat": chat_data, "user": send_username,
+                                                       "data": now_time}}})
         result2 = self.chat_collection.update({'ids': receive_username + "-" + send_username},
-                                              {"$set": {"chats." + count: {"chat": chat_data, "user": send_username,
-                                                        "data": now_time}},
-                                              "$inc": {"count": 1}})
+                                              {"$set": {"chats." + now_time: {"chat": chat_data, "user": send_username,
+                                                        "data": now_time}}})
 
         return "ok" if result['updatedExisting'] and result2['updatedExisting'] else "ng"
 
