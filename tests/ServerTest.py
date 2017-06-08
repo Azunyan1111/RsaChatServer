@@ -2,7 +2,7 @@ import unittest
 import main
 import base64
 import hashlib
-
+import time
 import pprint
 import json
 import requests
@@ -32,7 +32,7 @@ def signin():
     print response.content
 
 
-def set_friend(my , friend):
+def set_friend(my, friend):
     url = 'http://0.0.0.0:5000/set_friend'
     payload = {'username': my, 'friend_username': friend, 'terminal_hash': 'hash'}
     payload = {'json': json.dumps(payload)}
@@ -64,23 +64,37 @@ def get_chat(username, friend_username, hash_):
     response = requests.post(url, data=payload)
     print response.content
 
+
+def set_new_friend_zone(username, hash_):
+    url = 'http://0.0.0.0:5000/set_new_friend_zone'
+    payload = {'username': username, 'terminal_hash': hash_}
+    payload = {'json': json.dumps(payload)}
+    response = requests.post(url, data=payload)
+    print response.content
+
 if __name__ == "__main__":
     # get_server_public_key_base64()
     signup("admin", "admin", "base64", "hash")
-    signup("hoge", "hogehoge", "base64", "hash")
-    signup("hoge_", "hogehoge_", "base64", "hash")
+    signup("admin_", "admin", "base64", "hash")
+    signup("hoge", "hoge", "base64", "hash")
+    signup("foo", "hoge", "base64", "hash")
+    signup("hogehoge", "hoge", "base64", "hash")
+    signup("foofoo", "hoge", "base64", "hash")
     # signup("hoge()", "hogehoge", "base64", "hash")
     signin()
-    set_friend("admin", "hoge")
-    set_friend("admin", "hoge")
-    set_friend("admin", "hoge")
-    set_friend("admin", "foo")
-    get_friend()
+    set_friend("admin_", "hoge")
+    set_friend("admin_", "foo")
+    # get_friend()
 
-    set_chat("admin", "hoge", "hoge is fuck", "hash")
-    get_chat("admin", "hoge", "hash")
-    get_chat("hoge", "admin", "hash")
-    set_chat("hoge", "admin", "WTF", "hash")
-    get_chat("admin", "hoge", "hash")
-    get_chat("hoge", "admin", "hash")
-
+    # set_chat("admin", "hoge", "hoge is fuck", "hash")
+    # get_chat("admin", "hoge", "hash")
+    # get_chat("hoge", "admin", "hash")
+    # set_chat("hoge", "admin", "WTF", "hash")
+    # get_chat("admin", "hoge", "hash")
+    # get_chat("hoge", "admin", "hash")
+    while True:
+        set_new_friend_zone("hoge", "hash")
+        set_new_friend_zone("foo", "hash")
+        set_new_friend_zone("hogehoge", "hash")
+        set_new_friend_zone("foofoo", "hash")
+        time.sleep(10)

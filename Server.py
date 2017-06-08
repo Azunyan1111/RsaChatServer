@@ -107,6 +107,48 @@ def get_chat():
         return "Error: 400: Bad Request"
 
 
+@app.route('/get_new_friend_zone', methods=['GET', 'POST'])
+def get_new_friend_zone():
+    if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
+
+        username = data_json['username']
+        terminal_hash = data_json['terminal_hash']
+
+        return main.http_get_new_friend_zone(username, terminal_hash)
+        # return "hello world"
+    else:
+        return "Error: 400: Bad Request"
+
+
+@app.route('/set_new_friend_zone', methods=['GET', 'POST'])
+def set_new_friend_zone():
+    if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
+
+        username = data_json['username']
+        terminal_hash = data_json['terminal_hash']
+
+        return main.http_set_new_friend_zone(username, terminal_hash)
+        # return "hello world"
+    else:
+        return "Error: 400: Bad Request"
+
+
+@app.route('/new_friend_zone_add_friend', methods=['GET', 'POST'])
+def http_new_friend_zone_add_friend():
+    if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
+
+        username = data_json['username']
+        friend_username = data_json['friend_username']
+        terminal_hash = data_json['terminal_hash']
+
+        return main.http_new_friend_zone_add_friend(username, friend_username, terminal_hash)
+        # return "hello world"
+    else:
+        return "Error: 400: Bad Request"
+
 if __name__ == '__main__':
     main.db = MyMongoDb.MyMongoDb("MainDataBase", True)
     app.run(host='0.0.0.0')

@@ -6,12 +6,15 @@ import string
 import random
 import json
 import re
+import threading
+import time
 # my crypt
 import MyCrypto
 import MyMongoDb
 # this is global variable mongodb
 db = ""
 iv_ = "test_iv"
+new_fiend_zone = ["admin"]
 
 debug = True
 
@@ -89,11 +92,13 @@ def http_set_friend(username, friend_username, terminal_hash):
     # username = username_password_json['username']
     # friend_username = username_password_json['friend_username']
     # terminal_hash = username_password_json['terminal_hash']
+    # TODO:BASE friend_user
     return db.set_add_friend(username, friend_username, terminal_hash)
 
 
 def http_set_chat(send_username, receive_username, chat_data, terminal_hash):
     db.set_chat(send_username, receive_username, chat_data, terminal_hash)
+    # TODO:BASE to receive_user
     return "ok"
 
 
@@ -103,6 +108,46 @@ def http_get_chat(my_username, friend_username, terminal_hash):
     chat_data_json = json.dumps(chat_data)
     return chat_data_json
 
+
+def http_set_new_friend_zone(username, terminal_hash):
+    if db.is_username_find(username, terminal_hash) is False:
+        return "ng"
+    new_friend_zone_remove(username, 0)
+    new_fiend_zone.append(username)
+    t = threading.Thread(target=new_friend_zone_remove, args=(username, 15,))
+    t.start()
+    return "ok"
+
+
+def http_get_new_friend_zone(username, terminal_hash):
+    if db.is_username_find(username, terminal_hash) is False:
+        return "ng"
+    new_fiend_zone_json = json.dumps(new_fiend_zone)
+    new_fiend_zone_json = re.sub(r'"', '', new_fiend_zone_json)
+    new_fiend_zone_json = re.sub(r'\[', '', new_fiend_zone_json)
+    new_fiend_zone_json = re.sub(r'\]', '', new_fiend_zone_json)
+    new_fiend_zone_json = re.sub(r' ', '', new_fiend_zone_json)
+    return new_fiend_zone_json
+
+
+def http_new_friend_zone_add_friend(username, friend_name, terminal_hash):
+    if db.is_username_find(username, terminal_hash) is False:
+        return "ng"
+    new_friend_zone_remove(username, 0)
+    new_friend_zone_remove(friend_name, 0)
+    return http_set_friend(username, friend_name, terminal_hash)
+
+
+def new_friend_zone_remove(username, time_):
+    if new_fiend_zone.count(username) == 0:
+        return "can not remove"
+    time.sleep(time_)
+    try:
+        new_fiend_zone.remove(username)
+    except os.error:
+        return "can not remove"
+
+
 if __name__ == "__main__":
     db = MyMongoDb.MyMongoDb("MainDataBase", True)
 
@@ -111,21 +156,21 @@ if __name__ == "__main__":
     """-------------------NO ENCRYPT-------------------"""
 
     """ get server public_key_base64"""
-    print "server_public_key:", http_get_server_public_key_base64()
+    # print "server_public_key:", http_get_server_public_key_base64()
 
     """ new user signup"""
     # new user post data to server. username password pub_key
-    key = base64.b64encode(MyCrypto.get_rsa_public_key().exportKey())
-    terminal_hash_ = base64.b64encode(hashlib.sha256("this is terminal identification password.").digest())
+    # key = base64.b64encode(MyCrypto.get_rsa_public_key().exportKey())
+    # terminal_hash_ = base64.b64encode(hashlib.sha256("this is terminal identification password.").digest())
     # print "terminal_hash:", terminal_hash_
     # user_json = '{"username": "hoge", "password": "hogehoge",' \
     #             ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
     # user_json = json.loads(user_json)
     # print "signup_data      :", user_json
     # server
-    print http_signup("admin", "admin", key, terminal_hash_)
-    print http_signup("hoge", "hogehoge", key, terminal_hash_)
-    print http_signup("foo", "foofoo", key, terminal_hash_)
+    # print http_signup("admin", "admin", key, terminal_hash_)
+    # print http_signup("hoge", "hogehoge", key, terminal_hash_)
+    # print http_signup("foo", "foofoo", key, terminal_hash_)
 
     """ old user signin"""
     # old user signin
@@ -133,38 +178,55 @@ if __name__ == "__main__":
     #             ' "public_key_base64": "' + key + '", "terminal_hash": "' + terminal_hash_ + '"}'
     # user_json = json.loads(user_json)
     # print "signin_data      :", user_json
-    print http_signin("admin", "admin", key, terminal_hash_)
-    print http_signin("hoge", "hogehoge", key, terminal_hash_)
-    print http_signin("foo", "foofoo", key, terminal_hash_)
+    # print http_signin("admin", "admin", key, terminal_hash_)
+    # print http_signin("hoge", "hogehoge", key, terminal_hash_)
+    # print http_signin("foo", "foofoo", key, terminal_hash_)
 
     """ user get friend"""
     # user_json = '{"username": "hoge", "terminal_hash": "' + terminal_hash_ + '"}'
     # user_json = json.loads(user_json)
     # print "friend_get_data  :", user_json
-    print http_get_friend("admin", terminal_hash_)
-    print http_get_friend("hoge", terminal_hash_)
-    print http_get_friend("foo", terminal_hash_)
+    # print http_get_friend("admin", terminal_hash_)
+    # print http_get_friend("hoge", terminal_hash_)
+    # print http_get_friend("foo", terminal_hash_)
 
     """ user set friend"""
     # user_json = '{"username": "hoge", "friend_username": "foo", "terminal_hash": "' + terminal_hash_ + '"}'
     # user_json = json.loads(user_json)
     # print "friend_add_data  :", user_json
-    print http_set_friend("hoge", "foo", terminal_hash_)
+    # print http_set_friend("hoge", "foo", terminal_hash_)
 
     """ user get friend"""
-    print http_get_friend("admin", terminal_hash_)
-    print http_get_friend("hoge", terminal_hash_)
-    print http_get_friend("foo", terminal_hash_)
+    # print http_get_friend("admin", terminal_hash_)
+    # print http_get_friend("hoge", terminal_hash_)
+    # print http_get_friend("foo", terminal_hash_)
 
     """ hoge send message"""
 
-    print http_set_chat("hoge", "foo", "I love hoge.", terminal_hash_)
-    print http_get_chat("hoge", "foo", terminal_hash_)
-    print http_set_chat("foo", "hoge", "Fuckin hoge", terminal_hash_)
-    print http_get_chat("foo", "hoge", terminal_hash_)
-    print http_set_chat("foo", "hoge", "foo is my life", terminal_hash_)
-    print http_get_chat("foo", "hoge", terminal_hash_)
+    # print http_set_chat("hoge", "foo", "I love hoge.", terminal_hash_)
+    # print http_get_chat("hoge", "foo", terminal_hash_)
+    # print http_set_chat("foo", "hoge", "Fuckin hoge", terminal_hash_)
+    # print http_get_chat("foo", "hoge", terminal_hash_)
+    # print http_set_chat("foo", "hoge", "foo is my life", terminal_hash_)
+    # print http_get_chat("foo", "hoge", terminal_hash_)
 
+    """ set New Friend zone"""
+
+    # print http_set_new_friend_zone("admin", "hash")
+    # print http_set_new_friend_zone("hoge", "hash")
+    # print http_set_new_friend_zone("foo", "hash")
+    # print http_get_new_friend_zone("admin", "hash"), 0
+    # time.sleep(1)
+    # print http_get_new_friend_zone("admin", "hash"), 1
+    # time.sleep(1)
+    # print http_get_new_friend_zone("admin", "hash"), 2
+    # time.sleep(1)
+    # print http_get_new_friend_zone("admin", "hash"), 3
+    # time.sleep(1)
+    # print http_get_new_friend_zone("admin", "hash"), 4
+    while True:
+        time.sleep(1)
+        print http_get_new_friend_zone("admin", "hash")
 
     """-------------------NO ENCRYPT-------------------"""
 

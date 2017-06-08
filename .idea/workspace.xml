@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a652bd1-2a17-4026-be1e-798eb7ffb7f5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MyMongoDb.py" afterPath="$PROJECT_DIR$/MyMongoDb.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Server.py" afterPath="$PROJECT_DIR$/Server.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/ServerTest.py" afterPath="$PROJECT_DIR$/tests/ServerTest.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,8 +26,8 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="101" column="34" lean-forward="false" selection-start-line="101" selection-start-column="34" selection-end-line="101" selection-end-column="34" />
+            <state relative-caret-position="181">
+              <caret line="158" column="9" lean-forward="false" selection-start-line="158" selection-start-column="6" selection-end-line="158" selection-end-column="9" />
               <folding>
                 <element signature="e#24#38#0" expanded="true" />
               </folding>
@@ -36,8 +38,8 @@
       <file leaf-file-name="Server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
+            <state relative-caret-position="283">
+              <caret line="145" column="0" lean-forward="false" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
               <folding>
                 <element signature="e#0#68#0" expanded="true" />
               </folding>
@@ -48,8 +50,8 @@
       <file leaf-file-name="MyMongoDb.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MyMongoDb.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="148" column="106" lean-forward="false" selection-start-line="148" selection-start-column="106" selection-end-line="148" selection-end-column="106" />
+            <state relative-caret-position="370">
+              <caret line="170" column="9" lean-forward="false" selection-start-line="170" selection-start-column="4" selection-end-line="170" selection-end-column="9" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -60,8 +62,8 @@
       <file leaf-file-name="ServerTest.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/ServerTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
+            <state relative-caret-position="373">
+              <caret line="99" column="22" lean-forward="false" selection-start-line="99" selection-start-column="22" selection-end-line="99" selection-end-column="22" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -80,23 +82,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>mongodb</find>
-      <find>get_rsa_public_key</find>
-      <find>signup</find>
-      <find>my_crypter</find>
-      <find>get_rsa_encry</find>
-      <find>set_add_fr</find>
-      <find>http_signup</find>
-      <find>http_signin</find>
-      <find>add_friend</find>
-      <find>update</find>
-      <find>ObjectId</find>
-      <find>upda</find>
-      <find>set_friend</find>
-      <find>http_set_friend</find>
-      <find>send error</find>
-      <find>my_username-friend_username</find>
-      <find>http_get_chat</find>
       <find>find_one</find>
       <find>get</find>
       <find>get_user_friend</find>
@@ -104,12 +89,29 @@
       <find>http_get_friend</find>
       <find>now_time</find>
       <find>timedelta</find>
-      <find>get_chat</find>
       <find>$</find>
       <find>00000000</find>
       <find>get_friend</find>
-      <find>terminal_hash</find>
       <find>insert</find>
+      <find>hashhash</find>
+      <find>terminal_hash</find>
+      <find>friend</find>
+      <find>get_new_friend_zone</find>
+      <find>http_get_new_friend_zone</find>
+      <find>http_set_new_friend_zone</find>
+      <find>set_new_friend_zone</find>
+      <find>new_friend</find>
+      <find>ne</find>
+      <find>&quot;ne&quot;</find>
+      <find>get_chat</find>
+      <find>set_chat</find>
+      <find>set_add_friend</find>
+      <find>new_friend_zone_add_friend</find>
+      <find>http_set_friend</find>
+      <find>set_friend</find>
+      <find>pri</find>
+      <find>http_new_friend_zone_add_friend</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -127,8 +129,8 @@
         <option value="$PROJECT_DIR$/my_mongodb.py" />
         <option value="$PROJECT_DIR$/my_crypter.py" />
         <option value="$PROJECT_DIR$/server.py" />
-        <option value="$PROJECT_DIR$/Server.py" />
         <option value="$PROJECT_DIR$/tests/ServerTest.py" />
+        <option value="$PROJECT_DIR$/Server.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/MyMongoDb.py" />
       </list>
@@ -202,7 +204,7 @@
       <recent name="$PROJECT_DIR$/tests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.server">
+  <component name="RunManager" selected="Python.ServerTest">
     <configuration default="false" name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -520,7 +522,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3393086" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33674777" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290653" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -771,14 +773,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///Library/Python/2.7/site-packages/flask/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="1981" column="0" lean-forward="false" selection-start-line="1981" selection-start-column="0" selection-end-line="1981" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -885,36 +879,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/ServerTest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="101" column="34" lean-forward="false" selection-start-line="101" selection-start-column="34" selection-end-line="101" selection-end-column="34" />
-          <folding>
-            <element signature="e#24#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Python/2.7/site-packages/pymongo/collection.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1937">
@@ -923,10 +887,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///Library/Python/2.7/site-packages/flask/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="1079" column="0" lean-forward="false" selection-start-line="1079" selection-start-column="0" selection-end-line="1079" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/ServerTest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="99" column="22" lean-forward="false" selection-start-line="99" selection-start-column="22" selection-end-line="99" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="158" column="9" lean-forward="false" selection-start-line="158" selection-start-column="6" selection-end-line="158" selection-end-column="9" />
+          <folding>
+            <element signature="e#24#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="145" column="0" lean-forward="false" selection-start-line="145" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/MyMongoDb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="148" column="106" lean-forward="false" selection-start-line="148" selection-start-column="106" selection-end-line="148" selection-end-column="106" />
+        <state relative-caret-position="370">
+          <caret line="170" column="9" lean-forward="false" selection-start-line="170" selection-start-column="4" selection-end-line="170" selection-end-column="9" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
