@@ -154,9 +154,9 @@ def http_set_friend_zone(username, terminal_hash):
     # if db.is_username_find(username, terminal_hash) is False:
     #     return "ng"
     if friend_zone.count(username) != 0:
-        return "send friend zone ok"
+        return "ok"
     friend_zone.append(username)
-    return "set friend zone ok"
+    return "ok"
 
 
 def http_get_friend_zone_result(username, terminal_hash):
@@ -174,30 +174,32 @@ def friend_zone_main(time_):
     while True:
         try:
             friend_zone = []
-            friend_zone_ok = []
+            print friend_zone_ok
             time.sleep(time_)
+            friend_zone_ok = []
             if len(friend_zone) == 0 or len(friend_zone) == 1:
                 continue
-            for i in range(0, len(friend_zone) - (len(friend_zone) % 2) + 2, 2):
+            for i in range(0, len(friend_zone) - (len(friend_zone) % 2), 2):
                 print len(friend_zone), len(friend_zone) % 2, i
                 print friend_zone
                 if len(friend_zone) == 1:
                     continue
 
-                username = friend_zone.pop(random.randint(0, len(friend_zone) - 1))
-                friend_username = friend_zone.pop(random.randint(0, len(friend_zone) - 1))
+                username = friend_zone.pop(0)
+                friend_username = friend_zone.pop(0)
                 # add friend
                 print username, friend_username
                 db.set_user_friend_no_hash_server_only(username, friend_username)
                 # add ok list
                 friend_zone_ok.append(username)
                 friend_zone_ok.append(friend_username)
+                print friend_zone_ok
         except os.error:
             start_friend_zone()
 
 
 def start_friend_zone():
-    t = threading.Thread(target=friend_zone_main, args=(5,))
+    t = threading.Thread(target=friend_zone_main, args=(20,))
     t.start()
 
 
