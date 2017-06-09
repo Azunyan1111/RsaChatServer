@@ -8,14 +8,15 @@ import json
 import re
 import threading
 import time
+import random
 # my crypt
 import MyCrypto
 import MyMongoDb
 # this is global variable mongodb
 db = ""
 iv_ = "test_iv"
-new_fiend_zone = ["admin"]
-
+friend_zone = []
+friend_zone_ok = []
 debug = True
 
 
@@ -93,7 +94,7 @@ def http_set_friend(username, friend_username, terminal_hash):
     # friend_username = username_password_json['friend_username']
     # terminal_hash = username_password_json['terminal_hash']
     # TODO:BASE friend_user
-    return db.set_add_friend(username, friend_username, terminal_hash)
+    return db.set_user_friend(username, friend_username, terminal_hash)
 
 
 def http_set_chat(send_username, receive_username, chat_data, terminal_hash):
@@ -108,13 +109,13 @@ def http_get_chat(my_username, friend_username, terminal_hash):
     chat_data_json = json.dumps(chat_data)
     return chat_data_json
 
-
+"""
 def http_set_new_friend_zone(username, terminal_hash):
     if db.is_username_find(username, terminal_hash) is False:
         return "ng"
     new_friend_zone_remove(username, 0)
     new_fiend_zone.append(username)
-    t = threading.Thread(target=new_friend_zone_remove, args=(username, 15,))
+    t = threading.Thread(target=new_friend_zone_remove, args=(username, 20,))
     t.start()
     return "ok"
 
@@ -146,10 +147,75 @@ def new_friend_zone_remove(username, time_):
         new_fiend_zone.remove(username)
     except os.error:
         return "can not remove"
+"""
+
+
+def http_set_friend_zone(username, terminal_hash):
+    # if db.is_username_find(username, terminal_hash) is False:
+    #     return "ng"
+    if friend_zone.count(username) != 0:
+        return "send friend zone ok"
+    friend_zone.append(username)
+    return "set friend zone ok"
+
+
+def http_get_friend_zone_result(username, terminal_hash):
+    # if db.is_username_find(username, terminal_hash) is False:
+    #     return "ng"
+    if friend_zone_ok.count(username) != 0:
+        friend_zone_ok.remove(username)
+        return "ok"
+    return "ng"
+
+
+def friend_zone_main(time_):
+    global friend_zone
+    global friend_zone_ok
+    while True:
+        try:
+            friend_zone = []
+            friend_zone_ok = []
+            time.sleep(time_)
+            if len(friend_zone) == 0 or len(friend_zone) == 1:
+                continue
+            for i in range(0, len(friend_zone) - (len(friend_zone) % 2) + 2, 2):
+                print len(friend_zone), len(friend_zone) % 2, i
+                print friend_zone
+                if len(friend_zone) == 1:
+                    continue
+
+                username = friend_zone.pop(random.randint(0, len(friend_zone) - 1))
+                friend_username = friend_zone.pop(random.randint(0, len(friend_zone) - 1))
+                # add friend
+                print username, friend_username
+                db.set_user_friend_no_hash_server_only(username, friend_username)
+                # add ok list
+                friend_zone_ok.append(username)
+                friend_zone_ok.append(friend_username)
+        except os.error:
+            start_friend_zone()
+
+
+def start_friend_zone():
+    t = threading.Thread(target=friend_zone_main, args=(5,))
+    t.start()
 
 
 if __name__ == "__main__":
     db = MyMongoDb.MyMongoDb("MainDataBase", True)
+
+    start_friend_zone()
+
+    # print http_set_friend_zone("hoge", "hash")
+    # print http_set_friend_zone("hogehoge", "hash")
+    # while True:
+    #     print list(friend_zone)
+    #     time.sleep(2)
+    # print list(friend_zone)
+    # print http_set_friend_zone("foo", "hash")
+    # print list(friend_zone)
+    # print http_set_friend_zone("foofoo", "hash")
+    # print list(friend_zone)
 
     # setup_mongodb()
     # setup_rsa_keys()
@@ -224,9 +290,9 @@ if __name__ == "__main__":
     # print http_get_new_friend_zone("admin", "hash"), 3
     # time.sleep(1)
     # print http_get_new_friend_zone("admin", "hash"), 4
-    while True:
-        time.sleep(1)
-        print http_get_new_friend_zone("admin", "hash")
+    # while True:
+    #     time.sleep(1)
+    #     print http_get_new_friend_zone("admin", "hash")
 
     """-------------------NO ENCRYPT-------------------"""
 

@@ -5,7 +5,7 @@ import time
 import re
 from datetime import datetime, timedelta
 from collections import OrderedDict
-
+import json
 
 class MyMongoDb:
     """This class is Mongo DB my controller"""
@@ -44,7 +44,7 @@ class MyMongoDb:
         self.users_collection.insert_one({"username": username, "password": password,
                                           "public_key_base64": public_key_base64, "terminal_hash": terminal_hash})
         # add friend admin.
-        self.set_add_friend(username, "admin", terminal_hash)
+        self.set_user_friend(username, "admin", terminal_hash)
         # signin
         return self.set_signin(username, password, public_key_base64, terminal_hash)
 
@@ -57,33 +57,96 @@ class MyMongoDb:
                                      {"$set": {"public_key_base64": public_key_base64, "terminal_hash": terminal_hash}})
         return "ok"
 
-    def set_add_friend(self, username, friend_username, terminal_hash):
+    def set_user_friend(self, username, friend_username, terminal_hash):
         # check username and terminal_hash
         if self.users_collection.find_one({"username": username, "terminal_hash": terminal_hash}) is None:
             return "hacking error"
 
-        # friend collection check
+        if username == friend_username:
+            if username == "admin":
+                self.friend_collection.insert_one({"username": username, "friend_list": {"_1": [friend_username]}})
+                return "ok"
+            return "ng"
+
+        # if new user. add admin
         if self.friend_collection.find_one({"username": username}) is None:
             # new user data insert collection
             self.friend_collection.insert_one({"username": username, "friend_list": {"_1": [friend_username]}})
+
+        else:
+            # check friend_username
+            check_friend = self.friend_collection.find_one({"username": username}, {"friend_list": True, "_id": False})
+            add_list = str(check_friend['friend_list']['_1'])
+            add_list = re.sub(r"\[u'", '', add_list)
+            add_list = re.sub(r" u", '', add_list)
+            add_list = re.sub(r'\[', '', add_list)
+            add_list = re.sub(r'\]', '', add_list)
+            add_list = re.sub(r' ', '', add_list)
+            add_list = re.sub(r"'", '', add_list)
+            add_list = add_list.split(",")
+            if add_list.count(friend_username) != 0:
+                return "added"
+
+            # username
+            friend_username = re.sub(r"u", '', str(friend_username))
+            add_list.append(str(friend_username))
+            # add
+            self.friend_collection.update({"username": username}, {"$set": {"friend_list._1": add_list}})
+
+        # friend_username
+        all_friend = self.friend_collection.find_one({"username": friend_username}, {"friend_list": True, "_id": False})
+        add_list = str(all_friend['friend_list']['_1'])
+        add_list = re.sub(r"\[u'", '', add_list)
+        add_list = re.sub(r" u", '', add_list)
+        add_list = re.sub(r'\[', '', add_list)
+        add_list = re.sub(r'\]', '', add_list)
+        add_list = re.sub(r' ', '', add_list)
+        add_list = re.sub(r"'", '', add_list)
+        add_list = add_list.split(",")
+        add_list.append(str(username))
+        # add
+        self.friend_collection.update({"username": friend_username}, {"$set": {"friend_list._1": add_list}})
+
+        return "ok"
+
+    def set_user_friend_no_hash_server_only(self, username, friend_username):
+        # if new user. add admin
+        if self.friend_collection.find_one({"username": username}) is None:
             # new user data insert collection
-            self.friend_collection.insert_one({"username": friend_username, "friend_list": {"_1": [friend_username]}})
-            # send user to friend fast chat.
-            self.set_chat(username, friend_username, "Hello! Admin!", terminal_hash)
-            return "add friend new data ok"
-        # check friend_username
-        if self.friend_collection.find_one({"username": username, "friend_list._1": friend_username}) is not None:
-            return "added"
-        # get all friend. add friend
-        friend_list = self.friend_collection.find_one({"username": username}, {"_id": False, "friend_list._1": True})
-        friend_list = friend_list['friend_list']['_1']
-        friend_list.append(friend_username)
-        # old user add friend
-        self.friend_collection.update({"username": username}, {"$set": {"friend_list._1": friend_list}})
-        # friend user add user
-        self.friend_collection.update({"username": friend_username}, {"$set": {"friend_list._1": friend_list}})
-        # send user to friend fast chat.
-        self.set_chat(username, friend_username, "Hello! i added you.", terminal_hash)
+            self.friend_collection.insert_one({"username": username, "friend_list": {"_1": [friend_username]}})
+        else:
+            # check friend_username
+            check_friend = self.friend_collection.find_one({"username": username}, {"friend_list": True, "_id": False})
+            add_list = str(check_friend['friend_list']['_1'])
+            add_list = re.sub(r"\[u'", '', add_list)
+            add_list = re.sub(r" u", '', add_list)
+            add_list = re.sub(r'\[', '', add_list)
+            add_list = re.sub(r'\]', '', add_list)
+            add_list = re.sub(r' ', '', add_list)
+            add_list = re.sub(r"'", '', add_list)
+            add_list = add_list.split(",")
+            if add_list.count(friend_username) != 0:
+                return "added"
+
+            # username
+            friend_username = re.sub(r"u", '', str(friend_username))
+            add_list.append(str(friend_username))
+            # add
+            self.friend_collection.update({"username": username}, {"$set": {"friend_list._1": add_list}})
+
+        # friend_username
+        all_friend = self.friend_collection.find_one({"username": friend_username}, {"friend_list": True, "_id": False})
+        all_friend = str(all_friend['friend_list']['_1'])
+        all_friend = re.sub(r"\[u'", '', all_friend)
+        all_friend = re.sub(r" u", '', all_friend)
+        all_friend = re.sub(r'\[', '', all_friend)
+        all_friend = re.sub(r'\]', '', all_friend)
+        all_friend = re.sub(r' ', '', all_friend)
+        all_friend = re.sub(r"'", '', all_friend)
+        all_friend = all_friend.split(",")
+        all_friend.append(str(username))
+        # add
+        self.friend_collection.update({"username": friend_username}, {"$set": {"friend_list._1": all_friend}})
 
         return "ok"
 

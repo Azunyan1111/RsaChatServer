@@ -26,7 +26,7 @@ def signup(username, password, public_key, terminal_hash):
 
 def signin():
     url = 'http://0.0.0.0:5000/signin'
-    payload = {'username': 'admin', 'password': 'admin', 'public_key_base64': "base64", 'terminal_hash': 'hash'}
+    payload = {'username': 'admin', 'password': 'password', 'public_key_base64': "base64", 'terminal_hash': 'hash'}
     payload = {'json': json.dumps(payload)}
     response = requests.post(url, data=payload)
     print response.content
@@ -65,8 +65,16 @@ def get_chat(username, friend_username, hash_):
     print response.content
 
 
-def set_new_friend_zone(username, hash_):
-    url = 'http://0.0.0.0:5000/set_new_friend_zone'
+def set_friend_zone(username, hash_):
+    url = 'http://0.0.0.0:5000/set_friend_zone'
+    payload = {'username': username, 'terminal_hash': hash_}
+    payload = {'json': json.dumps(payload)}
+    response = requests.post(url, data=payload)
+    print response.content
+
+
+def http_get_friend_zone_result(username, hash_):
+    url = 'http://0.0.0.0:5000/get_friend_zone_result'
     payload = {'username': username, 'terminal_hash': hash_}
     payload = {'json': json.dumps(payload)}
     response = requests.post(url, data=payload)
@@ -74,16 +82,21 @@ def set_new_friend_zone(username, hash_):
 
 if __name__ == "__main__":
     # get_server_public_key_base64()
-    signup("admin", "admin", "base64", "hash")
-    signup("admin_", "admin", "base64", "hash")
-    signup("hoge", "hoge", "base64", "hash")
-    signup("foo", "hoge", "base64", "hash")
-    signup("hogehoge", "hoge", "base64", "hash")
-    signup("foofoo", "hoge", "base64", "hash")
+    signup("admin",     "password", "base64", "hash")
+    signup("user",      "password", "base64", "hash")
+    signup("hoge",      "password", "base64", "hash")
+    signup("foo",       "password", "base64", "hash")
+    signup("hogehoge",  "password", "base64", "hash")
+    signup("foofoo",    "password", "base64", "hash")
     # signup("hoge()", "hogehoge", "base64", "hash")
-    signin()
-    set_friend("admin_", "hoge")
-    set_friend("admin_", "foo")
+    # signin()
+    # set_friend("user", "hoge")
+    # set_friend("user", "foo")
+    # set_friend("hoge", "foo")
+    # set_friend("foofoo", "foo")
+    # set_friend("hoge", "foo")
+    # set_friend("hoge", "foofoo")
+    # set_friend("admin_", "foo")
     # get_friend()
 
     # set_chat("admin", "hoge", "hoge is fuck", "hash")
@@ -93,8 +106,28 @@ if __name__ == "__main__":
     # get_chat("admin", "hoge", "hash")
     # get_chat("hoge", "admin", "hash")
     while True:
-        set_new_friend_zone("hoge", "hash")
-        set_new_friend_zone("foo", "hash")
-        set_new_friend_zone("hogehoge", "hash")
-        set_new_friend_zone("foofoo", "hash")
-        time.sleep(10)
+        set_friend_zone("user", "hash")
+        set_friend_zone("hoge", "hash")
+        set_friend_zone("foo", "hash")
+        set_friend_zone("hogehoge", "hash")
+        set_friend_zone("foofoo", "hash")
+        time.sleep(1)
+        http_get_friend_zone_result("user", "hash")
+        http_get_friend_zone_result("hoge", "hash")
+        http_get_friend_zone_result("foo", "hash")
+        http_get_friend_zone_result("hogehoge", "hash")
+        http_get_friend_zone_result("foofoo", "hash")
+
+    """
+    set_friend_zone("user", "hash")
+    set_friend_zone("hoge", "hash")
+    set_friend_zone("foo", "hash")
+    set_friend_zone("hogehoge", "hash")
+    set_friend_zone("foofoo", "hash")
+    time.sleep(20)
+    http_get_friend_zone_result("user", "hash")
+    http_get_friend_zone_result("hoge", "hash")
+    http_get_friend_zone_result("foo", "hash")
+    http_get_friend_zone_result("hogehoge", "hash")
+    http_get_friend_zone_result("foofoo", "hash")
+    """

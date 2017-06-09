@@ -149,6 +149,36 @@ def http_new_friend_zone_add_friend():
     else:
         return "Error: 400: Bad Request"
 
+
+@app.route('/set_friend_zone', methods=['GET', 'POST'])
+def http_set_friend_zone():
+    if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
+
+        username = data_json['username']
+        terminal_hash = data_json['terminal_hash']
+
+        return main.http_set_friend_zone(username, terminal_hash)
+        # return "hello world"
+    else:
+        return "Error: 400: Bad Request"
+
+
+@app.route('/get_friend_zone_result', methods=['GET', 'POST'])
+def http_get_friend_zone_result():
+    if request.method == 'POST' or request.method == 'GET':
+        data_json = json.loads(request.form['json'])
+
+        username = data_json['username']
+        terminal_hash = data_json['terminal_hash']
+
+        return main.http_get_friend_zone_result(username, terminal_hash)
+        # return "hello world"
+    else:
+        return "Error: 400: Bad Request"
+
+
 if __name__ == '__main__':
     main.db = MyMongoDb.MyMongoDb("MainDataBase", True)
+    main.start_friend_zone()
     app.run(host='0.0.0.0')
